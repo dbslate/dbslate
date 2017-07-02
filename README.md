@@ -58,11 +58,8 @@ npm run gen
   They should help us focus on the things that matter.
   Power and low level control do not need to be traded away for convenience and approachability.
 - Developers must be given full control and privacy.
-  dbslate never asks you to share data with a 2nd party,
-  and all source code and assets should be permissively licensed.
-- Be mindful about choices.
-  Look at things from every angle and consider the tradeoffs.
-  Be pratical in execution.
+  All source code and assets are permissively licensed,
+  and dbslate never asks you to share data with a 2nd party.
 - Community is the backbone of open source,
   and we welcome all good faith contributions of any kind from everyone, including you. :eyes:
   Please open issues for everything you'd like to discuss.
