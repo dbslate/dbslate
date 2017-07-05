@@ -42,6 +42,9 @@ export interface SchemaDefinition {
   required?: string[];
   oneOf?: SchemaProperty[];
   allOf?: SchemaProperty[];
+  code?: {
+    declaration: string;
+  };
 }
 
 // this is the main definition to gen an app - a plain JSON data structure
@@ -54,7 +57,7 @@ export interface AppDef extends SchemaDefinition {
   description: string;
   definitions: {
     [key: string]: SchemaDefinition;
-    Action: {
+    Action: SchemaDefinition & {
       title: string;
       oneOf: {$ref: string}[];
     };

@@ -30,8 +30,8 @@ export const QueryList = ({
           <QueryListItem
             key={q.id}
             query={q}
-            activeQuery={activeQuery}
-            setActiveQuery={setActiveQuery}
+            active={q === activeQuery}
+            setActive={setActiveQuery}
           />,
         )}
       </div>

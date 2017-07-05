@@ -1,9 +1,10 @@
 {
-  "extends": [
-    "tslint-react",
-    "tslint-config-strictish"
-  ],
+  "extends": ["tslint-react", "tslint-config-strictish"],
   "rules": {
-    "jsx-no-multiline-js": false
+    // prettier takes care of many of these
+    "jsx-no-multiline-js": false,
+    "jsx-wrap-multiline": false,
+    "jsx-alignment": false,
+    "jsx-curly-spacing": false
   }
 }

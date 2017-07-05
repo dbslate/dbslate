@@ -4,7 +4,7 @@
 ~!! All edits will be lost!
 
 ../defs/app.def.json
-    |> tsExportDefJsonWriter
+    |> tsDefWriter
     |> ../defs/app.def.gen.ts
 
 ~!! This is an auto-generated file.
@@ -12,9 +12,9 @@
 ~!! WARNING !!~
 */
 
-import * as defs from '../defs';
+import {AppDef} from '../defs';
 
-export const appDef: defs.AppDef = {
+export const appDef: AppDef = {
   $schema: 'http://json-schema.org/draft-04/schema#',
   id: 'http://dbslate.com/v1/defs/app.def.json',
   name: 'app',
@@ -27,6 +27,9 @@ export const appDef: defs.AppDef = {
       type: 'string',
       minLength: 26,
       maxLength: 26,
+      code: {
+        declaration: 'export type Id = string;\n',
+      },
     },
     ClientState: {
       title: 'ClientState',
@@ -58,6 +61,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['sources', 'queries', 'activeQueryId'],
+      code: {
+        declaration:
+          'export interface ClientState {\n  sources: DataSource[];\n  queries: Query[];\n  activeQueryId: string | null;\n}\n',
+      },
     },
     DataSource: {
       title: 'DataSource',
@@ -77,6 +84,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['kind', 'id', 'title', 'uri'],
+      code: {
+        declaration:
+          "export interface DataSource {\n  kind: 'sql' | 'mongo';\n  id: Id;\n  title: string;\n  uri: string;\n}\n",
+      },
     },
     Query: {
       title: 'Query',
@@ -88,12 +99,16 @@ export const appDef: defs.AppDef = {
           $ref: '#/definitions/PendingQuery',
         },
         {
-          $ref: '#/definitions/FailedQuery',
+          $ref: '#/definitions/RejectedQuery',
         },
         {
           $ref: '#/definitions/ResolvedQuery',
         },
       ],
+      code: {
+        declaration:
+          'export type Query = NewQuery | PendingQuery | RejectedQuery | ResolvedQuery;\n',
+      },
     },
     NewQuery: {
       title: 'NewQuery',
@@ -127,6 +142,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['status', 'id', 'sourceId', 'title', 'raw', 'lastExecuted'],
+      code: {
+        declaration:
+          "export interface NewQuery {\n  status: 'new';\n  id: Id;\n  sourceId: Id;\n  title: string;\n  raw: string;\n  lastExecuted: string | null;\n}\n",
+      },
     },
     PendingQuery: {
       title: 'PendingQuery',
@@ -153,9 +172,13 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['status', 'id', 'sourceId', 'title', 'raw', 'lastExecuted'],
+      code: {
+        declaration:
+          "export interface PendingQuery {\n  status: 'pending';\n  id: Id;\n  sourceId: Id;\n  title: string;\n  raw: string;\n  lastExecuted: string;\n}\n",
+      },
     },
-    FailedQuery: {
-      title: 'FailedQuery',
+    RejectedQuery: {
+      title: 'RejectedQuery',
       type: 'object',
       properties: {
         status: {
@@ -190,6 +213,10 @@ export const appDef: defs.AppDef = {
         'lastExecuted',
         'error',
       ],
+      code: {
+        declaration:
+          "export interface RejectedQuery {\n  status: 'failed';\n  id: Id;\n  sourceId: Id;\n  title: string;\n  raw: string;\n  lastExecuted: string;\n  error: string;\n}\n",
+      },
     },
     ResolvedQuery: {
       title: 'ResolvedQuery',
@@ -243,6 +270,10 @@ export const appDef: defs.AppDef = {
         'lastExecuted',
         'results',
       ],
+      code: {
+        declaration:
+          "export interface ResolvedQuery {\n  status: 'resolved';\n  id: Id;\n  sourceId: Id;\n  title: string;\n  raw: string;\n  lastExecuted: string;\n  results: boolean | null | number | {} | string;\n}\n",
+      },
     },
     BaseAction: {
       title: 'BaseAction',
@@ -251,6 +282,9 @@ export const appDef: defs.AppDef = {
         cid: {
           $ref: '#/definitions/Id',
         },
+      },
+      code: {
+        declaration: 'export interface BaseAction {\n  cid?: Id;\n}\n',
       },
     },
     ActionReceivedByServer: {
@@ -267,6 +301,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['id'],
+      code: {
+        declaration:
+          'export interface ActionReceivedByServer extends BaseAction {\n  id: Id;\n}\n',
+      },
     },
     ActionType: {
       title: 'ActionType',
@@ -282,6 +320,10 @@ export const appDef: defs.AppDef = {
         'ExecuteSuccessQueryAction',
         'SetActiveQueryAction',
       ],
+      code: {
+        declaration:
+          'export enum ActionType {\n  SignUpUserAction,\n  SignInUserAction,\n  SignOutUserAction,\n  CreateQueryAction,\n  ReadQueryAction,\n  UpdateQueryAction,\n  DeleteQueryAction,\n  ExecuteQueryAction,\n  ExecuteSuccessQueryAction,\n  SetActiveQueryAction,\n}\n',
+      },
     },
     Action: {
       title: 'Action',
@@ -317,6 +359,10 @@ export const appDef: defs.AppDef = {
           $ref: '#/definitions/SetActiveQueryAction',
         },
       ],
+      code: {
+        declaration:
+          'export type Action =\n  | SignUpUserAction\n  | SignInUserAction\n  | SignOutUserAction\n  | CreateQueryAction\n  | ReadQueryAction\n  | UpdateQueryAction\n  | DeleteQueryAction\n  | ExecuteQueryAction\n  | ExecuteSuccessQueryAction\n  | SetActiveQueryAction;\n',
+      },
     },
     SignUpUserAction: {
       title: 'SignUpUserAction',
@@ -343,6 +389,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface SignUpUserAction extends BaseAction {\n  type: ActionType.SignUpUserAction;\n  payload: {\n    email: string;\n  };\n}\n',
+      },
     },
     SignInUserAction: {
       title: 'SignInUserAction',
@@ -372,6 +422,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface SignInUserAction extends BaseAction {\n  type: ActionType.SignInUserAction;\n  payload: {\n    email: string;\n    password: string;\n  };\n}\n',
+      },
     },
     SignOutUserAction: {
       title: 'SignOutUserAction',
@@ -392,6 +446,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface SignOutUserAction extends BaseAction {\n  type: ActionType.SignOutUserAction;\n  payload: null;\n}\n',
+      },
     },
     CreateQueryAction: {
       title: 'CreateQueryAction',
@@ -418,6 +476,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface CreateQueryAction extends BaseAction {\n  type: ActionType.CreateQueryAction;\n  payload: {\n    query: Query;\n  };\n}\n',
+      },
     },
     ReadQueryAction: {
       title: 'ReadQueryAction',
@@ -438,6 +500,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface ReadQueryAction extends BaseAction {\n  type: ActionType.ReadQueryAction;\n  payload: null;\n}\n',
+      },
     },
     UpdateQueryAction: {
       title: 'UpdateQueryAction',
@@ -473,6 +539,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface UpdateQueryAction extends BaseAction {\n  type: ActionType.UpdateQueryAction;\n  payload: {\n    id: Id;\n    sourceId?: Id;\n    title?: string;\n    raw?: string;\n  };\n}\n',
+      },
     },
     DeleteQueryAction: {
       title: 'DeleteQueryAction',
@@ -499,6 +569,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface DeleteQueryAction extends BaseAction {\n  type: ActionType.DeleteQueryAction;\n  payload: {\n    id: Id;\n  };\n}\n',
+      },
     },
     ExecuteQueryAction: {
       title: 'ExecuteQueryAction',
@@ -525,6 +599,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface ExecuteQueryAction extends BaseAction {\n  type: ActionType.ExecuteQueryAction;\n  payload: {\n    id: Id;\n  };\n}\n',
+      },
     },
     ExecuteSuccessQueryAction: {
       title: 'ExecuteSuccessQueryAction',
@@ -554,6 +632,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface ExecuteSuccessQueryAction extends BaseAction {\n  type: ActionType.ExecuteSuccessQueryAction;\n  payload: {\n    id: Id;\n    results: string;\n  };\n}\n',
+      },
     },
     SetActiveQueryAction: {
       title: 'SetActiveQueryAction',
@@ -580,6 +662,10 @@ export const appDef: defs.AppDef = {
         },
       },
       required: ['type', 'payload'],
+      code: {
+        declaration:
+          'export interface SetActiveQueryAction extends BaseAction {\n  type: ActionType.SetActiveQueryAction;\n  payload: {\n    id: Id;\n  };\n}\n',
+      },
     },
   },
   properties: {},
@@ -591,7 +677,7 @@ export const appDef: defs.AppDef = {
 ~!! All edits will be lost!
 
 ../defs/app.def.json
-    |> tsExportDefJsonWriter
+    |> tsDefWriter
     |> ../defs/app.def.gen.ts
 
 ~!! This is an auto-generated file.

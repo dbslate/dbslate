@@ -3,9 +3,9 @@ import {GenCtx, WriterResults} from '../gen/types';
 
 const writeContents = (def: AppDef): string =>
   `
-  import * as defs from '../defs';
+  import {AppDef} from '../defs';
 
-  export const ${def.name}Def: defs.AppDef = 
+  export const ${def.name}Def: AppDef = 
     ${JSON.stringify(def, null, 2)};
   `.trim();
 

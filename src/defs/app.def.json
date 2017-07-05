@@ -84,7 +84,7 @@
                     "$ref": "#/definitions/PendingQuery"
                 },
                 {
-                    "$ref": "#/definitions/FailedQuery"
+                    "$ref": "#/definitions/RejectedQuery"
                 },
                 {
                     "$ref": "#/definitions/ResolvedQuery"
@@ -164,8 +164,8 @@
                 "lastExecuted"
             ]
         },
-        "FailedQuery": {
-            "title": "FailedQuery",
+        "RejectedQuery": {
+            "title": "RejectedQuery",
             "type": "object",
             "properties": {
                 "status": {

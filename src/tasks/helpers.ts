@@ -24,7 +24,8 @@ export const loadCommentedJson = async (path: string): Promise<any> => {
 // The list of writers is what determines what gets written to the results data
 // TODO move this to config
 export const getWritersList = (): Writer[] => [
-  writers.tsExportDefJsonWriter,
+  // writers.tsExportDefJsonWriter,
+  writers.tsDefWriter,
   writers.tsTypeWriter,
   writers.tsMockWriter,
   writers.tsActionWriter,

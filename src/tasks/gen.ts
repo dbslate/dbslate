@@ -34,14 +34,15 @@ async function main(): Promise<void> {
   log('__dirname', __dirname);
   log('__filename', __filename, fp.join(__dirname, appSourcePath));
 
+  const prettierCfg = await loadCommentedJson('../../config/prettier.json');
+  const baseSchema = await loadCommentedJson('../defs/jsonschema-meta.json');
+
   // Load the app definition and generate some code
   const ctx: GenCtx = {
     defPath: appSourcePath,
     def: await loadCommentedJson(appSourcePath),
+    prettierCfg,
   };
-
-  const prettierCfg = await loadCommentedJson('../../config/prettier.json');
-  const baseSchema = await loadCommentedJson('../defs/jsonschema-meta.json');
 
   // This validation step is not very useful at the moment,
   // but it can be expanded to better validate the definition file

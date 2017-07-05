@@ -27,7 +27,7 @@ export interface DataSource {
   uri: string;
 }
 
-export type Query = NewQuery | PendingQuery | FailedQuery | ResolvedQuery;
+export type Query = NewQuery | PendingQuery | RejectedQuery | ResolvedQuery;
 
 export interface NewQuery {
   status: 'new';
@@ -47,7 +47,7 @@ export interface PendingQuery {
   lastExecuted: string;
 }
 
-export interface FailedQuery {
+export interface RejectedQuery {
   status: 'failed';
   id: Id;
   sourceId: Id;

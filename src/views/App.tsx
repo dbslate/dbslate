@@ -4,8 +4,11 @@ import {connect} from 'react-redux';
 import * as rand from '../utils/rand';
 import * as t from '../types';
 import {logger} from '../utils/logger';
+import {appDef} from '../defs';
 
 import {Frame} from './Frame';
+import {Docs} from './Docs';
+import {StateInspector} from './StateInspector';
 import {QueryList} from './QueryList';
 import {QueryEditor} from './QueryEditor';
 import {QueryResults} from './QueryResults';
@@ -15,6 +18,7 @@ import './App.css';
 const dbg = logger('App', {count: ['render']});
 
 interface ConnectedStateProps {
+  state: t.ClientState;
   queries: t.Query[];
   sources: t.DataSource[];
   activeQuery: t.Query | undefined;
@@ -35,6 +39,7 @@ class App extends React.Component<Props> {
   render(): JSX.Element {
     dbg('render', this, this.props.activeQuery);
     const {
+      state,
       queries,
       sources,
       activeQuery,
@@ -101,6 +106,12 @@ class App extends React.Component<Props> {
               </div>
             </div>
           </Frame>
+          <Frame>
+            <StateInspector state={state} def={appDef} />
+          </Frame>
+          <Frame>
+            <Docs def={appDef} />
+          </Frame>
         </div>
       </div>
     );
@@ -114,6 +125,7 @@ class App extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: t.ClientState): ConnectedStateProps => ({
+  state,
   queries: state.queries,
   sources: state.sources,
   // TODO make this a selector

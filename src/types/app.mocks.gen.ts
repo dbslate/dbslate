@@ -36,7 +36,7 @@ export const mockQuery = (): t.Query =>
   sample([
     t.mockNewQuery(),
     t.mockPendingQuery(),
-    t.mockFailedQuery(),
+    t.mockRejectedQuery(),
     t.mockResolvedQuery(),
   ]) as t.Query;
 
@@ -58,7 +58,7 @@ export const mockPendingQuery = (): t.PendingQuery => ({
   lastExecuted: rand.str(),
 });
 
-export const mockFailedQuery = (): t.FailedQuery => ({
+export const mockRejectedQuery = (): t.RejectedQuery => ({
   status: 'failed',
   id: t.mockId(),
   sourceId: t.mockId(),

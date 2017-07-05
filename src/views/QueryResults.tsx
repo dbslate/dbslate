@@ -42,7 +42,7 @@ export const renderQueryResults = (query: t.Query): JSX.Element | null => {
   }
 };
 
-export class QueryResults extends React.Component<Props> {
+export class QueryResults extends React.PureComponent<Props> {
   render(): JSX.Element | null {
     dbg('render', QueryResults);
     const {query} = this.props;

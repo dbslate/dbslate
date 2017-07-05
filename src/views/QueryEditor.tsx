@@ -15,7 +15,7 @@ export interface Props extends React.ClassAttributes<any> {
   updateSourceId(id: string, sourceId: string): void;
 }
 
-export class QueryEditor extends React.Component<Props> {
+export class QueryEditor extends React.PureComponent<Props> {
   render(): JSX.Element {
     dbg('render', this);
     const {query, sources} = this.props;

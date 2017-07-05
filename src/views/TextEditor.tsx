@@ -30,7 +30,7 @@ export interface Props {
   onChange(text: string): void;
 }
 
-export class TextEditor extends React.Component<Props> {
+export class TextEditor extends React.PureComponent<Props> {
   componentDidMount(): void {
     this.loadMonaco();
   }

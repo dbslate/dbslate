@@ -7,8 +7,8 @@ const dbg = logger('QueryListItem', {count: ['render']});
 
 export interface Props extends React.ClassAttributes<any> {
   query: t.Query;
-  activeQuery: t.Query | undefined;
-  setActiveQuery(id: string): void;
+  active?: boolean;
+  setActive(id: string): void;
 }
 
 export const renderTruncatedResults = (
@@ -49,10 +49,14 @@ export const renderTruncatedRawQuery = (
   return rawStr;
 };
 
-export class QueryListItem extends React.Component<Props> {
+export class QueryListItem extends React.PureComponent<Props> {
+  static defaultProps = {
+    active: false,
+  };
+
   render(): JSX.Element {
-    dbg('render', QueryListItem);
-    const {query, activeQuery} = this.props;
+    const {query, active} = this.props;
+    dbg('render', QueryListItem, active);
 
     return (
       <div
@@ -60,9 +64,7 @@ export class QueryListItem extends React.Component<Props> {
         style={{
           backgroundColor: '#fff',
           marginBottom: '1em',
-          border: query.id === (activeQuery && activeQuery.id)
-            ? '3px solid #edc'
-            : '3px solid #fff',
+          border: active ? '3px solid #edc' : '3px solid #fff',
         }}
         onClick={this.doSetActive}
       >
@@ -82,6 +84,6 @@ export class QueryListItem extends React.Component<Props> {
   }
 
   doSetActive = () => {
-    this.props.setActiveQuery(this.props.query.id);
+    this.props.setActive(this.props.query.id);
   };
 }

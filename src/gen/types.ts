@@ -3,6 +3,7 @@ import {AppDef} from '../defs/types';
 export interface GenCtx {
   defPath: string;
   def: AppDef;
+  prettierCfg: object;
 }
 
 export interface GennedFileData {
