@@ -19,3 +19,10 @@ export const renderOpenMultilineComment = (file: GennedFileData): string =>
 
 export const renderCloseMultilineComment = (file: GennedFileData): string =>
   isJsLike(file) ? '*/' : '*/';
+
+export const renderComment = (file: GennedFileData, contents: string): string =>
+  `
+${renderOpenMultilineComment(file)}
+${contents}
+${renderCloseMultilineComment(file)}
+  `.trim();

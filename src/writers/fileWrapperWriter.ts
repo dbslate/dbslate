@@ -6,9 +6,9 @@ export const writeFileContents = (
   ctx: GenCtx,
   file: GennedFileData,
 ): string => {
-  const header = `
-
-${h.renderOpenMultilineComment(file)}
+  const header = h.renderComment(
+    file,
+    `
 ~!! WARNING !!~
 ~!! This is an auto-generated file.
 ~!! All edits will be lost!
@@ -20,8 +20,8 @@ ${ctx.defPath}
 ~!! This is an auto-generated file.
 ~!! All edits will be lost!
 ~!! WARNING !!~
-${h.renderCloseMultilineComment(file)}
-  `.trim();
+  `.trim(),
+  );
   const footer = header;
 
   return `
