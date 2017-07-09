@@ -20,8 +20,9 @@ leveraging dbslate as a library/framework/boilerplate/cli/platform.
 ```bash
 npm install
 npm start
+npm run server
 
-# after editing `src/defs/app.def.json` or the writers used in `src/tasks/gen.ts`:
+# after editing `src/_userProject/app.def.json` or the writers used in `src/tasks/gen.ts`:
 npm run gen
 ```
 
@@ -50,16 +51,17 @@ npm run gen
   to automatically generate the same code you might write by hand.
   JSON's simple and flexible nature promises a bright future for diverse and deep tool development.
   See [`src/gen`](src/gen/README.md), [`npm run gen`](src/tasks/gen.ts),
-  and[`src/defs/app.def.json`](src/defs/app.def.json) for more.
+  and[`src/_userProject/app.def.json`](src/_userProject/app.def.json) for more.
 
 
 ## Philosophy
+- Developers must be given full control and privacy.
+  Using dbslate never means sharing data with a 2nd party,
+  and all source code is permissively licensed.
 - We want our tools to be powerful, robust, fast, simple, extensible, and easy to use.
   They should help us focus on the things that matter.
   Power and low level control do not need to be traded away for convenience and approachability.
-- Developers must be given full control and privacy.
-  All source code and assets are permissively licensed,
-  and dbslate never asks you to share data with a 2nd party.
+  Tools should be awesome and make us feel awesome.
 - Community is the backbone of open source,
   and we welcome all good faith contributions of any kind from everyone, including you. :eyes:
   Please open issues for everything you'd like to discuss.

@@ -4,7 +4,7 @@ import * as stripJsonComments from 'strip-json-comments';
 import * as promisify from 'es6-promisify';
 
 import {Writer} from '../gen/types';
-import * as writers from '../writers';
+import * as writers from '../gen/writers';
 
 // TODO this is expected to run only in node.. do something to enforce that or something
 
@@ -21,10 +21,9 @@ export const loadCommentedJson = async (path: string): Promise<any> => {
   return parsed;
 };
 
-// The list of writers is what determines what gets written to the results data
+// The list of writers determines what gets written to the results data
 // TODO move this to config
 export const getWritersList = (): Writer[] => [
-  // writers.tsExportDefJsonWriter,
   writers.tsDefWriter,
   writers.tsTypeWriter,
   writers.tsMockWriter,
@@ -33,13 +32,3 @@ export const getWritersList = (): Writer[] => [
   writers.tsReducerTestWriter,
   writers.fileWrapperWriter,
 ];
-
-// Simple logger - probably could remove this for `utils/logger` if it gets fixed
-export const log = (strOrAny: string | any, ...args: any[]): void => {
-  if (typeof strOrAny === 'string') {
-    args.unshift(`[task:gen] [${strOrAny}]`);
-  } else {
-    args.unshift(`[task:gen] ${strOrAny}`);
-  }
-  console.log.apply(console, args);
-};

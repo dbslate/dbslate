@@ -4,8 +4,10 @@ import * as prettier from 'prettier';
 import * as jsonschema from 'jsonschema';
 
 import {generate, GenCtx} from '../gen';
+import {logger} from '../utils/log';
+import {getWritersList, loadCommentedJson} from './helpers';
 
-import {getWritersList, loadCommentedJson, log} from './helpers';
+const log = logger('task:gen');
 
 /*
 
@@ -16,12 +18,15 @@ TODO need better workflow
 
 */
 
-// TODO task arg? or read from a master config somewhere? (hint)
-const appSourcePath = '../defs/app.def.json';
+// TODO config/env
+const appDir = '../_userProject';
+const appDefPath = `${appDir}/defs/app.def.json`;
+const prettierCfgPath = '../../config/prettier.json';
+const baseSchemaPath = '../gen/defs/jsonschema-meta.json';
 
 const saveFile = (destPath: string, contents: string): void => {
   log('saving', destPath);
-  const finalDestPath = fp.join(__dirname, destPath);
+  const finalDestPath = fp.join(__dirname, appDir, destPath);
   fs.writeFileSync(finalDestPath, contents, {
     encoding: 'utf8',
   });
@@ -30,17 +35,17 @@ const saveFile = (destPath: string, contents: string): void => {
 
 async function main(): Promise<void> {
   log('🗲 gen');
-  log('app source', appSourcePath);
+  log('app source', appDefPath);
   log('__dirname', __dirname);
-  log('__filename', __filename, fp.join(__dirname, appSourcePath));
+  log('__filename', __filename, fp.join(__dirname, appDefPath));
 
-  const prettierCfg = await loadCommentedJson('../../config/prettier.json');
-  const baseSchema = await loadCommentedJson('../defs/jsonschema-meta.json');
+  const prettierCfg = await loadCommentedJson(prettierCfgPath);
+  const baseSchema = await loadCommentedJson(baseSchemaPath);
 
   // Load the app definition and generate some code
   const ctx: GenCtx = {
-    defPath: appSourcePath,
-    def: await loadCommentedJson(appSourcePath),
+    defPath: appDefPath,
+    def: await loadCommentedJson(appDefPath),
     prettierCfg,
   };
 

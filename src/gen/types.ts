@@ -1,4 +1,4 @@
-import {AppDef} from '../defs/types';
+import {AppDef} from './defs/types';
 
 export interface GenCtx {
   defPath: string;

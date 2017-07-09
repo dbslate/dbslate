@@ -9,7 +9,8 @@ npm run gen
 
 dbslate takes a nontraditional approach to writing and maintaining much of its code.
 Rather than writing all code by hand directly in source files,
-dbslate takes a plain JSON schema (see [`/src/defs/app.def.json`](/src/defs/app.def.json)),
+dbslate takes a plain JSON schema
+(see [`/src/_userProject/defs/app.def.json`](/src/_userProject/defs/app.def.json)),
 and outputs source code across the whole web stack in multiple languages.
 The tradeoffs include a clearly worse code reading/writing/debugging experience,
 at least at first glance, but we believe defining most of an app as plain JSON
@@ -35,7 +36,6 @@ even if dbslate the _process_ is considered a failure.
 
 ## todo
 - model BaseAction better instead of simply being optional
-  (how/when cid gets added - runtime wrapper fn, `createAction`?)
 - `renderDefaultValue` patterned after `renderRandomValue`
 - enable generating lazy value resolution when possible (see mockAction)
 - generate per-field mock/default functions
