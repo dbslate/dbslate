@@ -1,13 +1,14 @@
 import * as Primus from 'primus';
 import * as chalk from 'chalk';
+import * as t from '$webdev-genstack/client/types';
 
+import {reloadSession, sessionMiddleware} from '../middleware/session';
+
+import {ExpressSession} from '../types';
 import {ServerCtx} from '../types';
 import {cookieMiddleware} from '../middleware/cookie';
-import {sessionMiddleware, reloadSession} from '../middleware/session';
-import {logger} from '../utils/log';
-import {ExpressSession} from '../types';
 import {handleMessage} from './handleMessage';
-import * as t from '../../client/types';
+import {logger} from '../utils/log';
 
 const log = logger('Primus');
 
@@ -33,10 +34,7 @@ export async function initPrimus(appCtx: ServerCtx): Promise<void> {
   };
 
   primus.use('cookies', cookieMiddleware(appCtx.config.secret));
-  primus.use(
-    'session',
-    sessionMiddleware(appCtx.config.secret, appCtx.sessionStore),
-  );
+  primus.use('session', sessionMiddleware(appCtx.config.secret, appCtx.sessionStore));
   primus.use('log', (req: any, _res: any) => {
     log('middleware req.session.userId', chalk.bgCyan(req.session.userId));
     log('middleware req.sessionID', chalk.bgYellow(req.sessionID));

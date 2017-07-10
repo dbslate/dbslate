@@ -1,9 +1,6 @@
-import {
-  SchemaDefinition,
-  SchemaProperty,
-  extractRefTypeTitle,
-} from '../../defs';
 import * as h from '../helpers';
+
+import {SchemaDefinition, SchemaProperty, extractRefTypeTitle} from '$gen/defs';
 
 /*
 
@@ -13,33 +10,18 @@ Most of it should probably be made more generic over the file type and moved to 
 
 */
 
-export const primitiveTypes = [
-  'string',
-  'number',
-  'boolean',
-  'null',
-  'undefined',
-  'object',
-  'any',
-];
+export const primitiveTypes = ['string', 'number', 'boolean', 'null', 'undefined', 'object', 'any'];
 
 export function renderQmark(prop: SchemaProperty, propName: string): '' | '?' {
   return prop.required && prop.required.includes(propName) ? '' : '?';
 }
 
 export function renderArrayType(prop: SchemaProperty): string {
-  return prop.items && prop.items.$ref
-    ? extractRefTypeTitle(prop.items.$ref)
-    : ''; // TODO this is a huge hack
+  return prop.items && prop.items.$ref ? extractRefTypeTitle(prop.items.$ref) : ''; // TODO this is a huge hack
 }
 
-export function renderTypeUnion(
-  prop: SchemaProperty,
-  refTypePrefix: string = 't.',
-): string {
-  return prop.oneOf
-    ? prop.oneOf.map(v => renderPropertyType(v, refTypePrefix)).join(' | ')
-    : '';
+export function renderTypeUnion(prop: SchemaProperty, refTypePrefix: string = 't.'): string {
+  return prop.oneOf ? prop.oneOf.map(v => renderPropertyType(v, refTypePrefix)).join(' | ') : '';
 }
 
 export function renderEnumType(
@@ -67,16 +49,9 @@ export function renderEnumTypeUnion(prop: SchemaProperty): string {
   return prop.enum ? prop.enum.map(v => `'${v}'`).join(' | ') : '';
 }
 
-export function renderEnumValues(
-  prop: SchemaProperty,
-  refTypePrefix: string = 't.',
-): string {
+export function renderEnumValues(prop: SchemaProperty, refTypePrefix: string = 't.'): string {
   return prop.enum
-    ? prop.enum
-        .map(
-          v => (prop.title ? `${refTypePrefix}${prop.title}.${v}` : `'${v}'`),
-        )
-        .join(', ')
+    ? prop.enum.map(v => (prop.title ? `${refTypePrefix}${prop.title}.${v}` : `'${v}'`)).join(', ')
     : '';
 }
 
@@ -129,10 +104,7 @@ export function renderInterfaceExtendType(
     : '';
 }
 
-export function renderRandomValue(
-  prop: SchemaProperty,
-  refTypePrefix: string = 't.',
-): string {
+export function renderRandomValue(prop: SchemaProperty, refTypePrefix: string = 't.'): string {
   // TODO huge temp hack ...wait that's everything, and it's not temp at all
   if (prop.properties) {
     return `
@@ -145,15 +117,11 @@ export function renderRandomValue(
       ? `${refTypePrefix}${h.extractRefTypeTitle(prop.$ref)}.${prop.value}` // TODO this is hardcoded for enums, or namespacing at least
       : `${refTypePrefix}mock${extractRefTypeTitle(prop.$ref)}()`; // TODO hmm? could do this at gen-time
   } else if (prop.value !== undefined) {
-    return typeof prop.value === 'string'
-      ? `'${prop.value}'`
-      : JSON.stringify(prop.value);
+    return typeof prop.value === 'string' ? `'${prop.value}'` : JSON.stringify(prop.value);
   } else if (prop.oneOf) {
     return `sample([${prop.oneOf
       .map(p => renderRandomValue(p, refTypePrefix))
-      .join(', ')}]) as ${prop.title
-      ? `${refTypePrefix}${prop.title}`
-      : renderTypeUnion(prop)}`; // TODO is hack to get around string literal problem from sample
+      .join(', ')}]) as ${prop.title ? `${refTypePrefix}${prop.title}` : renderTypeUnion(prop)}`; // TODO is hack to get around string literal problem from sample
   } else if (prop.enum) {
     return `sample([${renderEnumValues(prop)}]) as ${renderEnumType(prop)}`; // TODO is hack to get around string literal problem from sample
   } else {
@@ -233,14 +201,10 @@ export enum TypeDeclarationKind {
 }
 
 // TODO makes me think `SchemaProperty` should be a union type, instead of inferring it
-export const inferTypeDeclarationKind = (
-  definition: SchemaDefinition,
-): TypeDeclarationKind => {
+export const inferTypeDeclarationKind = (definition: SchemaDefinition): TypeDeclarationKind => {
   if (
     definition.oneOf ||
-    (definition.type &&
-      definition.type !== 'array' &&
-      definition.type !== 'object')
+    (definition.type && definition.type !== 'array' && definition.type !== 'object')
   ) {
     return TypeDeclarationKind.TypeLiteral;
   } else if (definition.enum) {
@@ -260,19 +224,11 @@ export function renderTypeDeclaration(definition: SchemaDefinition): string {
       `.trim();
     case TypeDeclarationKind.Enum:
       return `
-        export enum ${definition.title}${renderPropertyType(
-        definition,
-        '',
-        true,
-      )};
+        export enum ${definition.title}${renderPropertyType(definition, '', true)};
       `.trim();
     case TypeDeclarationKind.Interface:
       return `
-        export interface ${definition.title} ${renderInterfaceExtendType(
-        definition,
-        '',
-        false,
-      )} {
+        export interface ${definition.title} ${renderInterfaceExtendType(definition, '', false)} {
           ${renderPropList(definition, ';\n', '', renderPropertyPairNameToType)}
         }
       `.trim();
@@ -305,8 +261,7 @@ export function renderPropertiesObjectLiteral(
   return prop.type === 'object'
     ? `
       {
-        ${(prop.properties && Object.keys(prop.properties).join(separator)) ||
-          ''}
+        ${(prop.properties && Object.keys(prop.properties).join(separator)) || ''}
       }
       `.trim()
     : 'null';
@@ -316,15 +271,9 @@ const ACTION_SUFFIX = 'Action';
 const ACTION_SUFFIX_LENGTH = ACTION_SUFFIX.length;
 
 export function renderActionCreatorName(def: SchemaDefinition): string {
-  return (
-    def.title[0].toLowerCase() +
-    def.title.slice(1, def.title.length - ACTION_SUFFIX_LENGTH)
-  );
+  return def.title[0].toLowerCase() + def.title.slice(1, def.title.length - ACTION_SUFFIX_LENGTH);
 }
 
-export function renderActionTypeValue(
-  def: SchemaDefinition,
-  refTypePrefix: string = 't.',
-): string {
+export function renderActionTypeValue(def: SchemaDefinition, refTypePrefix: string = 't.'): string {
   return `${refTypePrefix}${def.title}`;
 }

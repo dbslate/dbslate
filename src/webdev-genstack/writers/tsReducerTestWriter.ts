@@ -1,13 +1,9 @@
-import {AppDef, getActions} from '../../defs';
-import {GenCtx, WriterResults} from '../../types';
+import {AppDef, getActions} from '$gen/defs';
+import {GenCtx, WriterResults} from '$gen/types';
 
 import * as h from '../helpers';
 
-const writeContents = (
-  path: string,
-  def: AppDef,
-  results: WriterResults,
-): string =>
+const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `
     // TODO make these tests more robust - like with snapshot testing
     // problem is snapshot testing doesn't play nicely with ids
@@ -29,10 +25,7 @@ const writeContents = (
       .join('\n\n')}
   `.trim();
 
-export function tsReducerTestWriter(
-  results: WriterResults,
-  ctx: GenCtx,
-): WriterResults {
+export function tsReducerTestWriter(results: WriterResults, ctx: GenCtx): WriterResults {
   const path = `client/reducers/${ctx.def.name}.reducer.gen.test.ts`;
   return {
     ...results,

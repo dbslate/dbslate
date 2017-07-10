@@ -1,19 +1,18 @@
-import * as React from 'react';
-import {connect} from 'react-redux';
-
-import * as rand from '../../../utils/rand';
-import {appDef} from '../../defs';
-import * as t from '../types';
-import {logger} from '../utils/log';
-
-import {Frame} from './Frame';
-import {Docs} from './Docs';
-import {StateInspector} from './StateInspector';
-import {QueryList} from './QueryList';
-import {QueryEditor} from './QueryEditor';
-import {QueryResults} from './QueryResults';
-
 import './App.css';
+
+import * as React from 'react';
+import * as rand from '../../../utils/rand';
+import * as t from '../types';
+
+import {Docs} from './Docs';
+import {Frame} from './Frame';
+import {QueryEditor} from './QueryEditor';
+import {QueryList} from './QueryList';
+import {QueryResults} from './QueryResults';
+import {StateInspector} from './StateInspector';
+import {appDef} from '$USERPROJECT/defs';
+import {connect} from 'react-redux';
+import {logger} from '../utils/log';
 
 const log = logger('App', {count: ['render']});
 
@@ -192,6 +191,4 @@ const mapDispatchToProps = (dispatch: t.Dispatch): ConnectedDispatchProps => ({
     }),
 });
 
-export default (connect(mapStateToProps, mapDispatchToProps)(
-  App as any,
-) as any) as typeof App; // TODO fix type...how?
+export default (connect(mapStateToProps, mapDispatchToProps)(App as any) as any) as typeof App; // TODO fix type...how?

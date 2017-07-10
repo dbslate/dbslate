@@ -3,10 +3,7 @@ import {logger} from '../utils/log';
 
 const log = logger('handleMessage');
 
-export async function handleMessage(
-  stores: t.Store,
-  message: t.Message,
-): Promise<void> {
+export async function handleMessage(stores: t.Store, message: t.Message): Promise<void> {
   log(t.MessageType[message.type], message, stores);
   switch (message.type) {
     case t.MessageType.InitMessage:

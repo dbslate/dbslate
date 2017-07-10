@@ -1,13 +1,9 @@
-import {AppDef} from '../../defs';
-import {GenCtx, WriterResults} from '../../types';
+import {AppDef} from '$gen/defs';
+import {GenCtx, WriterResults} from '$gen/types';
 
 import * as h from '../helpers';
 
-const writeContents = (
-  path: string,
-  def: AppDef,
-  results: WriterResults,
-): string =>
+const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `
   import {sample} from 'lodash';
 
@@ -26,10 +22,7 @@ const writeContents = (
     .join('\n\n')}
   `.trim();
 
-export function tsMockWriter(
-  results: WriterResults,
-  ctx: GenCtx,
-): WriterResults {
+export function tsMockWriter(results: WriterResults, ctx: GenCtx): WriterResults {
   const path = `types/${ctx.def.name}.mocks.gen.ts`;
   return {
     ...results,

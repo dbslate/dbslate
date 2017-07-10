@@ -1,5 +1,5 @@
-import {AppDef, getActions, SchemaProperty} from '../../defs';
-import {GenCtx, WriterResults} from '../../types';
+import {AppDef, getActions, SchemaProperty} from '$gen/defs';
+import {GenCtx, WriterResults} from '$gen/types';
 
 import * as h from '../helpers';
 
@@ -16,14 +16,8 @@ const writeContents = (def: AppDef): string =>
           (a.properties && a.properties.payload) || {},
           undefined,
           undefined,
-          (
-            prop: SchemaProperty,
-            propName: string,
-            parentProp: SchemaProperty,
-          ): string =>
-            propName === 'type'
-              ? ''
-              : h.renderPropertyPairNameToType(prop, propName, parentProp),
+          (prop: SchemaProperty, propName: string, parentProp: SchemaProperty): string =>
+            propName === 'type' ? '' : h.renderPropertyPairNameToType(prop, propName, parentProp),
         )}
       ): t.${a.title} => ({
         type: t.ActionType.${a.title},
@@ -37,10 +31,7 @@ const writeContents = (def: AppDef): string =>
 
   `.trim();
 
-export function tsActionWriter(
-  results: WriterResults,
-  ctx: GenCtx,
-): WriterResults {
+export function tsActionWriter(results: WriterResults, ctx: GenCtx): WriterResults {
   const path = `client/actions/${ctx.def.name}.actions.gen.ts`;
   return {
     ...results,

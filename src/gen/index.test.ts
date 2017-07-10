@@ -10,6 +10,7 @@ it('generates some files', async () => {
     defPath,
     prettierCfg,
   };
-  const generated = generate(ctx, getWritersList());
+  const writers = await getWritersList();
+  const generated = generate(ctx, writers);
   expect(generated.files.length).toBe(6);
 });

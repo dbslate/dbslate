@@ -68,8 +68,7 @@ const clientConfig = {
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location
-    devtoolModuleFilenameTemplate: info =>
-      fp.relative(paths.appSrc, info.absoluteResourcePath),
+    devtoolModuleFilenameTemplate: info => fp.relative(paths.appSrc, info.absoluteResourcePath),
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -92,6 +91,8 @@ const clientConfig = {
 
       // monaco
       vs: fp.resolve(__dirname, '../node_modules/monaco-editor/min/vs'),
+
+      _webdev: fp.resolve(__dirname, '../src/gen/writers/webdev'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).

@@ -73,8 +73,7 @@ const clientConfig = {
     // This is the URL that app is served from. We use "/" in development.
     publicPath,
     // Point sourcemap entries to original disk location
-    devtoolModuleFilenameTemplate: info =>
-      fp.resolve(info.absoluteResourcePath),
+    devtoolModuleFilenameTemplate: info => fp.resolve(info.absoluteResourcePath),
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -97,6 +96,9 @@ const clientConfig = {
 
       // monaco
       vs: fp.resolve(__dirname, '../node_modules/monaco-editor/dev/vs'),
+
+      // if you edit these, edit serverConfig object below
+      $webdev: fp.resolve(__dirname, '../src/gen/stack/webdev'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -290,6 +292,9 @@ const serverConfig = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
+    alias: {
+      $webdev: fp.resolve(__dirname, '../src/gen/stack/webdev'),
+    },
   },
   module: {
     // preLoaders: [{test: /\.ts(x?)$/, loader: 'tslint'}],

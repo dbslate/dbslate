@@ -28,7 +28,19 @@
         //"configFile": "tslint.json"
         //"disableNoUnusedVariableRule": false
       }
-    ]
+    ],
+
+    // path aliases
+    "baseUrl": ".",
+    "paths": {
+      // TODO these will be their own packages (monorepo)
+      "$gen/*": ["src/gen/*"],
+      "$webdev-genstack/*": ["src/webdev-genstack/*"],
+      "$utils/*": ["src/utils/*"],
+
+      // this should not be used but temporarily in place for refactoring
+      "$USERPROJECT/*": ["src/_userProject/*"]
+    }
   },
   "include": [
     "src/**/*"

@@ -57,8 +57,10 @@ async function main(): Promise<void> {
     throw new Error(`Validator error: ${validatorResult.errors[0]}`);
   }
 
+  const writers = await getWritersList();
+
   // `gen.generate` is a pure function - is does not perform any io actions or mutate anything external
-  const resultsData = generate(ctx, getWritersList());
+  const resultsData = generate(ctx, writers);
 
   // write the results to the file system, to fit expected programmer workflow
   for (const file of resultsData.files) {

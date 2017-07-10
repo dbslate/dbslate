@@ -1,13 +1,9 @@
-import {AppDef, getActions} from '../../defs';
-import {GenCtx, WriterResults} from '../../types';
+import {AppDef, getActions} from '$gen/defs';
+import {GenCtx, WriterResults} from '$gen/types';
 
 import * as h from '../helpers';
 
-const writeContents = (
-  path: string,
-  def: AppDef,
-  results: WriterResults,
-): string =>
+const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `
     // TODO make these tests more robust - like with snapshot testing
 
@@ -26,10 +22,7 @@ const writeContents = (
       .join('\n\n')}
   `.trim();
 
-export function tsActionTestWriter(
-  results: WriterResults,
-  ctx: GenCtx,
-): WriterResults {
+export function tsActionTestWriter(results: WriterResults, ctx: GenCtx): WriterResults {
   const path = `client/actions/${ctx.def.name}.actions.gen.test.ts`;
   return {
     ...results,

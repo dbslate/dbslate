@@ -8,7 +8,7 @@ import {initSessionStore} from './initSessionStore';
 
 const log = logger('init');
 
-export async function main(): Promise<ServerCtx> {
+export async function initBasicServer(): Promise<ServerCtx> {
   log('main enter');
 
   // TODO create with helper, don't cast type

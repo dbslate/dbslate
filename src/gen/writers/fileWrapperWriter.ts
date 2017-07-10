@@ -1,11 +1,8 @@
-import {GenCtx, GennedFileData, WriterResults} from '../../types';
-
 import * as h from '../helpers';
 
-export const writeFileContents = (
-  ctx: GenCtx,
-  file: GennedFileData,
-): string => {
+import {GenCtx, GennedFileData, WriterResults} from '../types';
+
+export const writeFileContents = (ctx: GenCtx, file: GennedFileData): string => {
   const header = h.renderComment(
     file,
     `
@@ -33,10 +30,7 @@ ${footer}
   `.trim();
 };
 
-export function fileWrapperWriter(
-  results: WriterResults,
-  ctx: GenCtx,
-): WriterResults {
+export function fileWrapperWriter(results: WriterResults, ctx: GenCtx): WriterResults {
   return {
     ...results,
     files: results.files.map(f => ({

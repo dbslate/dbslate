@@ -1,10 +1,10 @@
-import * as http from 'http';
 import * as Koa from 'koa';
-import * as Router from 'koa-router';
 import * as Primus from 'primus';
+import * as Router from 'koa-router';
 import * as expressSession from 'express-session';
+import * as http from 'http';
 
-import {Message} from '../../client/types';
+import {Message} from '$webdev-genstack/client/types';
 
 export interface ServerConfig {
   port: number;
@@ -20,9 +20,7 @@ export interface ServerCtx {
   sessionStore: ExpressSessionStore;
 }
 
-export type ExpressSessionStore =
-  | expressSession.Store
-  | expressSession.MemoryStore;
+export type ExpressSessionStore = expressSession.Store | expressSession.MemoryStore;
 
 // Koa is used for the http server, but Primus uses Express sessions right now.
 export interface ExpressSession extends Express.Session {

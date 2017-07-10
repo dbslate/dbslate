@@ -1,5 +1,5 @@
-export * from '../../../utils/is';
-export * from '../../types';
+export * from '$utils/is';
+export * from '$USERPROJECT/types';
 export * from '../actions/app.actions.gen';
 
 import {Store as ReduxStore, Dispatch as ReduxDispatch} from 'redux';

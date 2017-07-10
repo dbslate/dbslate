@@ -1,10 +1,10 @@
-import {main} from './main';
-import {ServerCtx} from './types';
-import {logger} from './utils/log';
+import {ServerCtx} from '$webdev-genstack/server/types';
+import {logger} from '$webdev-genstack/server/utils/log';
+import {initBasicServer} from '$webdev-genstack/server/main';
 
 const log = logger('server/index');
 
-main()
+initBasicServer(/* {registerRoutes: fn} */)
   .then((ctx: ServerCtx) => {
     log('created ctx', Object.keys(ctx));
   })

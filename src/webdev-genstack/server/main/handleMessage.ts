@@ -1,6 +1,8 @@
-import * as t from '../../client/types';
+import * as t from '$webdev-genstack/client/types';
+
+import {PrimusSpark, ServerCtx} from '../types';
+
 import {logger} from '../utils/log';
-import {ServerCtx, PrimusSpark} from '../types';
 // import {updateSessionUserId, saveSession} from '../middleware/session';
 
 const log = logger('handleMessage');

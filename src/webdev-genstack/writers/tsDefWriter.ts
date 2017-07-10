@@ -1,7 +1,7 @@
 import * as prettier from 'prettier';
 
-import {AppDef} from '../../defs';
-import {GenCtx, WriterResults} from '../../types';
+import {AppDef} from '$gen/defs';
+import {GenCtx, WriterResults} from '$gen/types';
 
 import * as h from '../helpers';
 
@@ -41,10 +41,7 @@ const writeContents = (def: AppDef, prettierCfg: object): string =>
   };
   `.trim();
 
-export function tsDefWriter(
-  results: WriterResults,
-  ctx: GenCtx,
-): WriterResults {
+export function tsDefWriter(results: WriterResults, ctx: GenCtx): WriterResults {
   const path = `defs/${ctx.def.name}.def.gen.ts`;
   return {
     ...results,
