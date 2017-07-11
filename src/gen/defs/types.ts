@@ -7,6 +7,20 @@ export type SchemaType =
   | 'object'
   | 'null';
 
+/*
+
+consider: 
+
+export type SchemaProperty = PrimitiveSchemaProperty | {...}
+
+export type PrimitiveSchemaProperty = {
+
+}
+
+// and write a function that detects if it's a primitive (and gen this?)
+
+*/
+
 // TODO this is haphazard, just made to work, is not very useful/correct
 export interface SchemaProperty {
   [key: string]: any;
