@@ -1,7 +1,7 @@
+import * as h from '../helpers';
+
 import {AppDef, getActions} from '$gen/defs';
 import {GenCtx, WriterResults} from '$gen/types';
-
-import * as h from '../helpers';
 
 const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `

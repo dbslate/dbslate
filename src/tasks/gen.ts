@@ -1,11 +1,12 @@
-import * as fs from 'fs';
 import * as fp from 'path';
-import * as prettier from 'prettier';
+import * as fs from 'fs';
 import * as jsonschema from 'jsonschema';
+import * as prettier from 'prettier';
 
-import {generate, GenCtx} from '../gen';
-import {logger} from '../utils/log';
+import {GenCtx, generate} from '$gen';
 import {getWritersList, loadCommentedJson} from './helpers';
+
+import {logger} from '../utils/log';
 
 const log = logger('task:gen');
 
@@ -26,7 +27,7 @@ const baseSchemaPath = '../gen/defs/jsonschema-meta.json';
 
 const saveFile = (destPath: string, contents: string): void => {
   log('saving', destPath);
-  const finalDestPath = fp.join(__dirname, appDir, destPath);
+  const finalDestPath = fp.join(appDir, destPath);
   fs.writeFileSync(finalDestPath, contents, {
     encoding: 'utf8',
   });

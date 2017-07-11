@@ -1,6 +1,6 @@
+import {ClientCtx} from '$webdev-genstack/client/types';
 import {initBasic} from '$webdev-genstack/client/main';
 import {logger} from '$webdev-genstack/client/utils/log';
-import {ClientCtx} from '$webdev-genstack/client/types';
 
 const log = logger('client/index');
 

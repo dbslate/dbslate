@@ -1,25 +1,18 @@
-export * from './tsActionWriter';
-export * from './tsTypeWriter';
-export * from './tsMockWriter';
-export * from './tsDefWriter';
-export * from './tsActionTestWriter';
-export * from './tsReducerTestWriter';
-
-import {tsActionWriter} from './tsActionWriter';
+import {Writer} from '$gen/types';
+import {fileWrapperWriter} from '$gen/writers';
 import {tsActionTestWriter} from './tsActionTestWriter';
+import {tsActionWriter} from './tsActionWriter';
 import {tsDefWriter} from './tsDefWriter';
 import {tsMockWriter} from './tsMockWriter';
 import {tsReducerTestWriter} from './tsReducerTestWriter';
 import {tsTypeWriter} from './tsTypeWriter';
-import {Writer} from '$gen/types';
 
-export const ordered: Writer[] = [
+export const writers: Writer[] = [
   tsDefWriter,
   tsTypeWriter,
   tsMockWriter,
   tsActionWriter,
   tsActionTestWriter,
   tsReducerTestWriter,
+  fileWrapperWriter,
 ];
-
-export default ordered;

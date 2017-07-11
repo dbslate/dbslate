@@ -1,10 +1,11 @@
 import * as fs from 'fs';
-import * as fp from 'path';
-import * as stripJsonComments from 'strip-json-comments';
 import * as promisify from 'es6-promisify';
+import * as stripJsonComments from 'strip-json-comments';
 
 import {Writer} from '$gen/types';
-import {fileWrapperWriter} from '$gen/writers';
+import {writers} from '$webdev-genstack';
+
+//import {userStack} from '$gen';
 
 // TODO this is expected to run only in node.. do something to enforce that or something
 
@@ -14,27 +15,17 @@ const readFile: (path: string, options: {encoding: 'utf8'}) => Promise<string> =
 );
 
 export const loadCommentedJson = async (path: string): Promise<any> => {
-  const contents = await readFile(fp.join(__dirname, path), {encoding: 'utf8'});
+  const contents = await readFile(path, {encoding: 'utf8'});
   const stripped = stripJsonComments(contents);
   const parsed = JSON.parse(stripped);
   return parsed;
 };
 
-// TODO needs to be discovered
-const currentStack = (): string => '$webdev-genstack';
-
 // The list of writers determines what gets written to the results data
 // TODO move this to config
 export async function getWritersList(): Promise<Writer[]> {
-  const writers = await import(`${currentStack()}/writers`);
-  return Promise.resolve(writers.concat(fileWrapperWriter));
-  // return [
-  //   writers.tsDefWriter,
-  //   writers.tsTypeWriter,
-  //   writers.tsMockWriter,
-  //   writers.tsActionWriter,
-  //   writers.tsActionTestWriter,
-  //   writers.tsReducerTestWriter,
-  //   fileWrapperWriter,
-  // ];
+  return writers;
+  // console.log('userStack', userStack())
+  // const stack = await import(userStack());
+  // return stack.writers;
 }

@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "outDir": "build/dist",
+    "outDir": "build",
     "module": "commonjs",
-    "target": "es5",
+    "target": "esnext",
     "lib": [
       "es2017",
       "dom"
@@ -34,7 +34,9 @@
     "baseUrl": ".",
     "paths": {
       // TODO these will be their own packages (monorepo)
+      "$gen": ["src/gen"],
       "$gen/*": ["src/gen/*"],
+      "$webdev-genstack": ["src/webdev-genstack"],
       "$webdev-genstack/*": ["src/webdev-genstack/*"],
       "$utils/*": ["src/utils/*"],
 
