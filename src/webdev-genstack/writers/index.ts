@@ -7,7 +7,7 @@ import {tsMockWriter} from './tsMockWriter';
 import {tsReducerTestWriter} from './tsReducerTestWriter';
 import {tsTypeWriter} from './tsTypeWriter';
 
-export const writers: Writer[] = [
+export const writers = (): Writer[] => [
   tsDefWriter,
   tsTypeWriter,
   tsMockWriter,

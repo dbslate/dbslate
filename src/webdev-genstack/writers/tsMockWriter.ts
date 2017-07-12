@@ -24,7 +24,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `.trim();
 
 export function tsMockWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `client/types/${ctx.def.name}.mocks.gen.ts`;
+  const path = `${ctx.outputDir}/${ctx.def.name}.mocks.gen.ts`;
   return {
     ...results,
     files: results.files.concat({

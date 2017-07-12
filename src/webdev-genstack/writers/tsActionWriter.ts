@@ -1,7 +1,7 @@
-import {AppDef, getActions, SchemaProperty} from '$gen/defs';
-import {GenCtx, WriterResults} from '$gen/types';
-
 import * as h from '../helpers';
+
+import {AppDef, SchemaProperty, getActions} from '$gen/defs';
+import {GenCtx, WriterResults} from '$gen/types';
 
 // TODO should probably be renamed
 const writeContents = (def: AppDef): string =>
@@ -32,7 +32,7 @@ const writeContents = (def: AppDef): string =>
   `.trim();
 
 export function tsActionWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `client/actions/${ctx.def.name}.actions.gen.ts`;
+  const path = `${ctx.outputDir}/${ctx.def.name}.actions.gen.ts`;
   return {
     ...results,
     files: results.files.concat({

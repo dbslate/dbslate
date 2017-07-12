@@ -23,7 +23,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `.trim();
 
 export function tsActionTestWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `client/actions/${ctx.def.name}.actions.gen.test.ts`;
+  const path = `${ctx.outputDir}/${ctx.def.name}.actions.gen.test.ts`;
   return {
     ...results,
     files: results.files.concat({

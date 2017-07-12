@@ -33,11 +33,13 @@
     "@types/koa-router": "^7.0.22",
     "@types/koa-session": "^3.0.0",
     "@types/lodash": "^4.14.66",
+    "@types/minimist": "^1.2.0",
     "@types/mkdirp": "^0.3.29",
     "@types/node": "^8.0.3",
     "@types/react": "^15.0.32",
     "@types/react-dom": "^15.5.1",
     "@types/react-redux": "^4.4.45",
+    "@types/strip-json-comments": "0.0.28",
     "cookie-parser": "^1.4.3",
     "es6-promisify": "^5.0.0",
     "express-session": "^1.15.3",
@@ -104,9 +106,18 @@
     "whatwg-fetch": "2.0.3"
   },
   "jest": {
-    "collectCoverageFrom": ["src/**/*.{js,jsx,ts,tsx}"],
-    "setupFiles": ["<rootDir>/config/polyfills.js"],
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
       "<rootDir>/src/**/?(*.)(spec|test).ts?(x)"
@@ -118,13 +129,17 @@
       "^.+\\.tsx?$": "<rootDir>/config/jest/typescriptTransform.js",
       "^(?!.*\\.(css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
-    "transformIgnorePatterns": ["[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"],
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tssx)$"
+    ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
     }
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"

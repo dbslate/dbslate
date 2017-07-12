@@ -4,6 +4,8 @@ export interface GenCtx {
   defPath: string;
   def: AppDef;
   prettierCfg: object;
+  outputDir: string;
+  stack: string;
 }
 
 export interface GennedFileData {

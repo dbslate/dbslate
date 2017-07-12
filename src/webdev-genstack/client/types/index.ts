@@ -1,10 +1,8 @@
 export * from '$utils/is';
-export * from '$USERPROJECT/types';
-export * from '../actions/app.actions.gen';
-
-import {Store as ReduxStore, Dispatch as ReduxDispatch} from 'redux';
 
 import * as t from '../types';
+
+import {Dispatch as ReduxDispatch, Store as ReduxStore} from 'redux';
 
 export interface ClientCtx {
   root: HTMLElement | null;
