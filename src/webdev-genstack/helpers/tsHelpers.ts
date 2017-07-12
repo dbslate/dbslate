@@ -1,6 +1,6 @@
 import * as h from '../helpers';
 
-import {SchemaDefinition, SchemaProperty, extractRefTypeTitle} from '$gen/defs';
+import {SchemaDefinition, SchemaProperty, extractRefTypeTitle} from '$sculpt/defs';
 
 /*
 
@@ -27,7 +27,7 @@ export function renderTypeUnion(prop: SchemaProperty, refTypePrefix: string = 't
 export function renderEnumType(
   prop: SchemaProperty,
   refTypePrefix: string = 't.',
-  isDeclaration: boolean = false,
+  isDeclaration: boolean = false
 ): string {
   if (!prop.enum) {
     return '';
@@ -71,7 +71,7 @@ export function renderPrimitivePropertyType(prop: SchemaProperty): string {
 export function renderPropertyType(
   prop: SchemaProperty,
   refTypePrefix: string = 't.',
-  isDeclaration: boolean = false,
+  isDeclaration: boolean = false
 ): string {
   if (prop.$ref) {
     return prop.value !== undefined // TODO could replace all of this branching with a switch() over a declarative kind
@@ -95,7 +95,7 @@ export function renderPropertyType(
 export function renderInterfaceExtendType(
   prop: SchemaProperty,
   refTypePrefix: string = 't.',
-  isDeclaration: boolean = false,
+  isDeclaration: boolean = false
 ): string {
   return prop.allOf
     ? `extends ${prop.allOf
@@ -150,7 +150,7 @@ export function renderPropertyPairNameToValue(
   prop: SchemaProperty,
   propName: string,
   parentProp: SchemaProperty,
-  refTypePrefix: string = 't.',
+  refTypePrefix: string = 't.'
 ): string {
   return `${propName}: ${renderRandomValue(prop, refTypePrefix)}`;
 }
@@ -159,11 +159,11 @@ export function renderPropertyPairNameToType(
   prop: SchemaProperty,
   propName: string,
   parentProp: SchemaProperty,
-  refTypePrefix: string = 't.',
+  refTypePrefix: string = 't.'
 ): string {
   return `${propName}${renderQmark(parentProp, propName)}: ${renderPropertyType(
     prop,
-    refTypePrefix,
+    refTypePrefix
   )}`;
 }
 
@@ -171,7 +171,7 @@ export function renderCallingArgs(
   prop: SchemaProperty,
   propName: string,
   parentProp: SchemaProperty,
-  refTypePrefix: string = 't.',
+  refTypePrefix: string = 't.'
 ): string {
   return renderRandomValue(prop, refTypePrefix);
 }
@@ -181,13 +181,13 @@ export function renderPropList(
   prop: SchemaProperty,
   separator: string = ',\n',
   refTypePrefix: string = 't.',
-  fn: typeof renderPropertyPairNameToValue = renderPropertyPairNameToValue,
+  fn: typeof renderPropertyPairNameToValue = renderPropertyPairNameToValue
 ): string {
   return prop.properties
     ? Object.keys(prop.properties)
         .map(propName =>
           // tslint:disable-next-line:no-non-null-assertion
-          fn(prop.properties![propName], propName, prop, refTypePrefix),
+          fn(prop.properties![propName], propName, prop, refTypePrefix)
         )
         .filter(p => p)
         .join(separator)
@@ -240,7 +240,7 @@ export function renderTypeDeclaration(definition: SchemaDefinition): string {
 
 export function renderActionCreatorCall(
   def: SchemaDefinition,
-  refTypePrefix: string = 't.',
+  refTypePrefix: string = 't.'
 ): string {
   return `
   ${refTypePrefix}${renderActionCreatorName(def)}(
@@ -248,7 +248,7 @@ export function renderActionCreatorCall(
       (def.properties && def.properties.payload) || {},
       undefined,
       refTypePrefix,
-      renderCallingArgs,
+      renderCallingArgs
     )}
   )
   `.trim();
@@ -256,7 +256,7 @@ export function renderActionCreatorCall(
 
 export function renderPropertiesObjectLiteral(
   prop: SchemaProperty,
-  separator: string = ',\n',
+  separator: string = ',\n'
 ): string {
   return prop.type === 'object'
     ? `

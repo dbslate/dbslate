@@ -1,5 +1,5 @@
-import {Writer} from '$gen/types';
-import {fileWrapperWriter} from '$gen/writers';
+import {Writer} from '$sculpt/types';
+import {fileWrapperWriter} from '$sculpt/writers';
 import {tsActionTestWriter} from './tsActionTestWriter';
 import {tsActionWriter} from './tsActionWriter';
 import {tsDefWriter} from './tsDefWriter';

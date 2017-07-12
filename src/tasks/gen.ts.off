@@ -4,7 +4,7 @@ import * as jsonschema from 'jsonschema';
 import * as mkdirp from 'mkdirp';
 import * as prettier from 'prettier';
 
-import {GenCtx, generate} from '$gen';
+import {GenCtx, generate} from '$sculpt';
 import {getWritersList, loadCommentedJson} from './helpers';
 
 import {logger} from '../utils/log';

@@ -12,7 +12,7 @@ Try to use `TSLint (vnext) - eg2.ts-tslints` when severity problem is figured ou
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.formatOnSave": true,
     "prettier.singleQuote": true,
-    "prettier.trailingComma": "all",
+    "prettier.trailingComma": "es5",
     "prettier.bracketSpacing": false,
     "tslint.alwaysShowRuleFailuresAsWarnings": true,
     "files.exclude": {

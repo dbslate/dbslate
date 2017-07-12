@@ -1,7 +1,7 @@
 import * as h from '../helpers';
 
-import {AppDef, SchemaProperty, getActions} from '$gen/defs';
-import {GenCtx, WriterResults} from '$gen/types';
+import {AppDef, SchemaProperty, getActions} from '$sculpt/defs';
+import {GenCtx, WriterResults} from '$sculpt/types';
 
 // TODO should probably be renamed
 const writeContents = (def: AppDef): string =>
@@ -17,7 +17,7 @@ const writeContents = (def: AppDef): string =>
           undefined,
           undefined,
           (prop: SchemaProperty, propName: string, parentProp: SchemaProperty): string =>
-            propName === 'type' ? '' : h.renderPropertyPairNameToType(prop, propName, parentProp),
+            propName === 'type' ? '' : h.renderPropertyPairNameToType(prop, propName, parentProp)
         )}
       ): t.${a.title} => ({
         type: t.ActionType.${a.title},
@@ -25,7 +25,7 @@ const writeContents = (def: AppDef): string =>
           ? `payload: ${h.renderPropertiesObjectLiteral(a.properties.payload)},`
           : ''}
       })
-      `.trim(),
+      `.trim()
     )
     .join('\n\n')}
 

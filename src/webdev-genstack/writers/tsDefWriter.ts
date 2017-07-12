@@ -1,9 +1,9 @@
 import * as h from '../helpers';
 import * as prettier from 'prettier';
 
-import {GenCtx, WriterResults} from '$gen/types';
+import {GenCtx, WriterResults} from '$sculpt/types';
 
-import {AppDef} from '$gen/defs';
+import {AppDef} from '$sculpt/defs';
 
 const writeContents = (def: AppDef, prettierCfg: object): string =>
   `
@@ -22,15 +22,15 @@ const writeContents = (def: AppDef, prettierCfg: object): string =>
                     code: {
                       declaration: prettier.format(
                         h.renderTypeDeclaration(def.definitions[defName]),
-                        prettierCfg,
+                        prettierCfg
                       ),
                     },
                     title: defName,
                   },
                   null,
-                  2,
+                  2
                 )}
-              `,
+              `
               )}
           }
             `;

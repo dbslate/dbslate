@@ -34,8 +34,8 @@
     "baseUrl": ".",
     "paths": {
       // TODO these will be their own packages (monorepo)
-      "$gen": ["src/gen"],
-      "$gen/*": ["src/gen/*"],
+      "$sculpt": ["src/sculpt/src/lib"],
+      "$sculpt/*": ["src/sculpt/src/lib/*"],
       "$webdev-genstack": ["src/webdev-genstack"],
       "$webdev-genstack/*": ["src/webdev-genstack/*"],
       "$utils/*": ["src/utils/*"],

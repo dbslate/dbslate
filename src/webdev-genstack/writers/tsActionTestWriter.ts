@@ -1,7 +1,7 @@
 import * as h from '../helpers';
 
-import {AppDef, getActions} from '$gen/defs';
-import {GenCtx, WriterResults} from '$gen/types';
+import {AppDef, getActions} from '$sculpt/defs';
+import {GenCtx, WriterResults} from '$sculpt/types';
 
 const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `
@@ -17,7 +17,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
           const action = ${h.renderActionCreatorCall(a)};
           t.is<${h.renderActionTypeValue(a)}>(action);
         });
-        `.trim(),
+        `.trim()
       )
       .join('\n\n')}
   `.trim();

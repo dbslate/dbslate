@@ -1,8 +1,8 @@
 import * as h from '../helpers';
 
-import {GenCtx, WriterResults} from '$gen/types';
+import {GenCtx, WriterResults} from '$sculpt/types';
 
-import {AppDef} from '$gen/defs';
+import {AppDef} from '$sculpt/defs';
 
 const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `

@@ -5,16 +5,19 @@ const nodeExternals = require('webpack-node-externals');
 const compact = require('lodash/compact');
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
-const entryFile = fp.resolve(process.env.entry_file);
-const outputFilename = fp.basename(entryFile, fp.extname(entryFile)) + '.js';
+const entryFile = process.env.entry_file;
+const outputFilename = fp.join(
+  fp.dirname(entryFile).replace(/^src\//, ''),
+  fp.basename(entryFile, fp.extname(entryFile)) + '.js'
+);
 
-console.log('entryFile', {entryFile, outputFilename});
+console.log(`[compile] Compiling ${entryFile} to ${outputFilename}`);
 
 const config = {
-  entry: [entryFile], // must be filled in
+  entry: [fp.resolve(entryFile)], // must be filled in
   target: 'node',
   output: {
-    path: fp.resolve(__dirname, '../build/dist'), // needs to be at same depth as thing being built
+    path: fp.resolve(__dirname, '../build'), // needs to be at same depth as thing being built
     filename: outputFilename, // must be filled in
     publicPath: fp.resolve(__dirname, '../public'),
   },

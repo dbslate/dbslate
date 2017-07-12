@@ -1,0 +1,243 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "http://dbslate.com/v1/defs/app.def.json",
+    "name": "webdev-sculptstack",
+    "title": "WebDev",
+    "description": "webdev-sculptstack app def",
+    "type": "object",
+    "definitions": {
+        "Id": {
+            "title": "Id",
+            "type": "string",
+            "minLength": 26,
+            "maxLength": 26
+        },
+        "ClientState": {
+            "title": "ClientState",
+            "type": "object",
+            "properties": {
+                "sources": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/DataSource"
+                    },
+                    "uniqueItems": true
+                },
+                "queries": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Query"
+                    },
+                    "uniqueItems": true
+                },
+                "activeQueryId": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "sources",
+                "queries",
+                "activeQueryId"
+            ]
+        },
+        "BaseAction": {
+            "title": "BaseAction",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/Id"
+                }
+            }
+        },
+        "ActionType": {
+            "title": "ActionType",
+            "enum": [
+                "SignUpUserAction",
+                "SignInUserAction",
+                "SignOutUserAction",
+            ]
+        },
+        "Action": {
+            "title": "Action",
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/SignUpUserAction"
+                },
+                {
+                    "$ref": "#/definitions/SignInUserAction"
+                },
+                {
+                    "$ref": "#/definitions/SignOutUserAction"
+                }
+            ]
+        },
+        // TODO action enhanced with id, cid, other meta info
+        // cids, client ids, are used to dedupe - the time value tells you who wins
+        "SignUpUserAction": {
+            "title": "SignUpUserAction",
+            "type": "object",
+            "id": "User/SignUp",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BaseAction"
+                }
+            ],
+            "properties": {
+                "type": { "$ref": "#/definitions/ActionType", "value": "SignUpUserAction" },
+                "payload": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "email"
+                    ]
+                }
+            },
+            "required": [
+                "type",
+                "payload"
+            ]
+        },
+        "SignInUserAction": {
+            "title": "SignInUserAction",
+            "type": "object",
+            "id": "User/SignIn",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BaseAction"
+                }
+            ],
+            "properties": {
+                "type": { "$ref": "#/definitions/ActionType", "value": "SignInUserAction" },
+                "payload": {
+                    "type": "object",
+                    "properties": {
+                        "email": {
+                            "type": "string"
+                        },
+                        "password": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "email",
+                        "password"
+                    ]
+                }
+            },
+            "required": [
+                "type",
+                "payload"
+            ]
+        },
+        "SignOutUserAction": {
+            "title": "SignOutUserAction",
+            "type": "object",
+            "id": "User/SignOut",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BaseAction"
+                }
+            ],
+            "properties": {
+                "type": { "$ref": "#/definitions/ActionType", "value": "SignOutUserAction" },
+                "payload": {"type": "null"}
+            },
+            "required":[
+                "type",
+                "payload"
+            ]
+        },
+        "BaseMessage": {
+            "title": "BaseMessage",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/Id"
+                }
+            }
+        },
+        "MessageType": {
+            "title": "MessageType",
+            "enum": [
+                "InitMessage",
+                "ActionPerformedMessage"
+            ]
+        },
+        "Message": {
+            "title": "Message",
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/InitMessage"
+                },
+                {
+                    "$ref": "#/definitions/ActionPerformedMessage"
+                }
+            ]
+        },
+        "InitMessage": {
+            "title": "InitMessage",
+            "type": "object",
+            "id": "User/SignUp",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BaseMessage"
+                }
+            ],
+            "properties": {
+                "type": { "$ref": "#/definitions/MessageType", "value": "InitMessage" },
+                "payload": {
+                    "type": "null"
+                }
+            },
+            "required": [
+                "type",
+                "payload"
+            ]
+        },
+        "ActionPerformedMessage": {
+            "title": "ActionPerformedMessage",
+            "type": "object",
+            "id": "User/SignUp",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/BaseMessage"
+                }
+            ],
+            "properties": {
+                "type": { "$ref": "#/definitions/MessageType", "value": "ActionPerformedMessage" },
+                "payload": {
+                    "type": "object",
+                    "properties": {
+                        "action": {
+                            "$ref": "#/definitions/Action"
+                        }
+                    },
+                    "required": [
+                        "action"
+                    ]
+                }
+            },
+            "required": [
+                "type",
+                "payload"
+            ]
+        }
+    },
+    "properties": {
+        //
+        // TODO? what goes here?
+        // apps:
+        // histories: {actions: [], }
+    }
+}

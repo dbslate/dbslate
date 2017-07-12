@@ -1,6 +1,6 @@
 export * from '$utils/is';
 
-import * as t from '../types';
+import * as t from './app.types.gen';
 
 import {Dispatch as ReduxDispatch, Store as ReduxStore} from 'redux';
 

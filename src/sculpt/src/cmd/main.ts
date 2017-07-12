@@ -1,12 +1,3 @@
-/*
-
-    npm run gen
-
-NOTE! Any changes to this file must be followed by a manual `npm run build:sculpt`.
-TODO need better workflow
-
-*/
-
 import * as fp from 'path';
 import * as jsonschema from 'jsonschema';
 import * as minimist from 'minimist';
@@ -17,12 +8,7 @@ import {loadCommentedJson, log, saveFile} from './helpers';
 
 import {Writer} from '../lib/types';
 
-/**
- * Parses CLI args.
- *
- * More info: https://github.com/substack/minimist
- */
-function parseArgs(): minimist.ParsedArgs {
+function printUsage():void {
   // TODO read from package.json
   const version = '0.0.0';
   const usage = `
@@ -34,6 +20,16 @@ options:
   output-dir      Output directory
   stack           Name of stack to use
 `;
+
+  console.log(usage);
+}
+
+/**
+ * Parses CLI args.
+ *
+ * More info: https://github.com/substack/minimist
+ */
+function parseArgs(): minimist.ParsedArgs {
   const defaults = {
     baseDir: process.env.cwd(),
     outputDir: process.env.cwd(),
@@ -52,8 +48,9 @@ options:
     boolean: treatAsBools,
     default: defaults,
   });
+
   if (argv.help) {
-    console.log(usage);
+    printUsage();
     process.exit(0);
   }
   return argv;
