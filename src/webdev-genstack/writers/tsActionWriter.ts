@@ -6,7 +6,7 @@ import {GenCtx, WriterResults} from '$sculpt/types';
 // TODO should probably be renamed
 const writeContents = (def: AppDef): string =>
   `
-  import * as t from '../types';
+  import * as t from './types.gen';
 
   ${getActions(def)
     .map(a =>
@@ -32,7 +32,7 @@ const writeContents = (def: AppDef): string =>
   `.trim();
 
 export function tsActionWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `${ctx.outputDir}/${ctx.def.name}.actions.gen.ts`;
+  const path = `${ctx.outputDir}/actions.gen.ts`;
   return {
     ...results,
     files: results.files.concat({

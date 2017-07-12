@@ -3,3 +3,9 @@ function build-sculpt {
     node scripts/compile.js src/sculpt/src/cmd/main.ts dist/sculpt.js
 }
 
+#. Sculpts webdev-sculptstack
+function sculpt-webdev {
+    node dist/sculpt.js src/webdev-genstack
+}
+
+

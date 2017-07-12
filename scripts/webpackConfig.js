@@ -21,7 +21,7 @@ const config = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
     alias: {
-      $gen: fp.resolve(__dirname, '../src/gen'),
+      $sculpt: fp.resolve(__dirname, '../src/sculpt/src/lib'),
       '$webdev-genstack': fp.resolve(__dirname, '../src/webdev-genstack'),
       $utils: fp.resolve(__dirname, '../src/utils'),
       $USERPROJECT: fp.resolve(__dirname, '../src/_userProject'),

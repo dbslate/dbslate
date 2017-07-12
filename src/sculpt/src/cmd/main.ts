@@ -7,8 +7,10 @@ import {GenCtx, generate} from '../lib';
 import {loadCommentedJson, log, saveFile} from './helpers';
 
 import {Writer} from '../lib/types';
+// TODO this is a hack, we should be dynamically importing these
+import {writers} from '$webdev-genstack/writers';
 
-function printUsage():void {
+function printUsage(): void {
   // TODO read from package.json
   const version = '0.0.0';
   const usage = `
@@ -32,7 +34,7 @@ options:
 function parseArgs(): minimist.ParsedArgs {
   const defaults = {
     stack: '$webdev-genstack',
-    defFile: 'app.def.json'
+    defFile: 'app.def.json',
   };
   const optionAliases = {
     defFile: ['f', 'def-file'],
@@ -54,6 +56,8 @@ function parseArgs(): minimist.ParsedArgs {
   // the sole argument is the directory containing app schema
   const dir = argv._[0] ? argv._[0] : process.env.cwd();
   argv.workingDir = fp.resolve(dir);
+
+  console.log('argv', JSON.stringify(argv, null, 2));
   return argv;
 }
 
@@ -103,8 +107,12 @@ async function validate(ctx: GenCtx): Promise<void> {
 
 // The list of writers determines what gets written to the results data
 async function getWritersList(ctx: GenCtx): Promise<Writer[]> {
-  const {writers} = await import(ctx.stack);
-  return writers;
+  // TODO this should import from compiled stack, we're jumping through hoops
+  // to work with dirs as-is
+  // console.log('ctx.stack', ctx.stack);
+  // const {writers} = await import(ctx.stack);
+
+  return writers();
 }
 
 async function main(): Promise<void> {

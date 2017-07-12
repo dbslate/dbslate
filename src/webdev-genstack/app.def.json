@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "id": "http://dbslate.com/v1/defs/app.def.json",
-    "name": "webdev-sculptstack",
+    "name": "WebDevSculptStack",
     "title": "WebDev",
     "description": "webdev-sculptstack app def",
     "type": "object",
@@ -16,36 +16,7 @@
             "title": "ClientState",
             "type": "object",
             "properties": {
-                "sources": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/DataSource"
-                    },
-                    "uniqueItems": true
-                },
-                "queries": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Query"
-                    },
-                    "uniqueItems": true
-                },
-                "activeQueryId": {
-                    "oneOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
-                }
-            },
-            "required": [
-                "sources",
-                "queries",
-                "activeQueryId"
-            ]
+            }
         },
         "BaseAction": {
             "title": "BaseAction",
@@ -61,7 +32,7 @@
             "enum": [
                 "SignUpUserAction",
                 "SignInUserAction",
-                "SignOutUserAction",
+                "SignOutUserAction"
             ]
         },
         "Action": {

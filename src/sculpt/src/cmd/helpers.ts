@@ -14,6 +14,7 @@ const readFile: (path: string, options: {encoding: 'utf8'}) => Promise<string> =
 );
 
 export const loadCommentedJson = async (path: string): Promise<any> => {
+  console.log('loadCommentedJson:path', path);
   const contents = await readFile(path, {encoding: 'utf8'});
   const stripped = stripJsonComments(contents);
   const parsed = JSON.parse(stripped);

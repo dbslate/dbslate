@@ -36,9 +36,10 @@
       // TODO these will be their own packages (monorepo)
       "$sculpt": ["src/sculpt/src/lib"],
       "$sculpt/*": ["src/sculpt/src/lib/*"],
+      "$utils": ["src/utils"],
+      "$utils/*": ["src/utils/*"],
       "$webdev-genstack": ["src/webdev-genstack"],
       "$webdev-genstack/*": ["src/webdev-genstack/*"],
-      "$utils/*": ["src/utils/*"],
 
       // this should not be used but temporarily in place for refactoring
       "$USERPROJECT/*": ["src/_userProject/*"]

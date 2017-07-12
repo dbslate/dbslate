@@ -8,8 +8,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `
   import {sample} from 'lodash';
 
-  import * as rand from '../../utils/rand';
-  import * as t from '../types';
+  import * as t from './types.gen';
 
   ${Object.keys(def.definitions)
     .map(d => {
@@ -24,7 +23,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `.trim();
 
 export function tsMockWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `${ctx.outputDir}/${ctx.def.name}.mocks.gen.ts`;
+  const path = `${ctx.outputDir}/mocks.gen.ts`;
   return {
     ...results,
     files: results.files.concat({

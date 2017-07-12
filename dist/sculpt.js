@@ -64,17 +64,71 @@ require("source-map-support").install();
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 19);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(16));
+__export(__webpack_require__(3));
+__export(__webpack_require__(17));
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(3));
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 1 */
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var lodash_1 = __webpack_require__(7);
+// TODO is hacky, should probably follow relative path on def tree.
+exports.extractRefTypeTitle = function ($ref) {
+    return lodash_1.last($ref.split('/')) || '';
+};
+exports.lookupDef = function (d, $ref) {
+    return d.definitions[exports.extractRefTypeTitle($ref)];
+};
+exports.getActions = function (d) {
+    return d.definitions.Action.oneOf.map(function (a) {
+        return exports.lookupDef(d, a.$ref || '');
+    });
+};
+// TODO check recursively
+// export const inheritsFrom = ($ref: string) => (
+//   d: SchemaDefinition,
+// ): boolean => !!d.allOf && d.allOf.some(a => a.$ref === $ref);
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -86,13 +140,13 @@ exports.getDefaultResultsData = function () { return ({
 
 
 /***/ }),
-/* 2 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = __webpack_require__(4);
+var lodash_1 = __webpack_require__(7);
 exports.validateWriters = function (writers) {
     for (var _i = 0, writers_1 = writers; _i < writers_1.length; _i++) {
         var w = writers_1[_i];
@@ -112,7 +166,7 @@ exports.validateResults = function (results) {
 
 
 /***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -132,13 +186,19 @@ exports.logger = function (tag) { return function () {
 
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ }),
-/* 5 */
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("prettier");
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -179,12 +239,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fp = __webpack_require__(0);
-var jsonschema = __webpack_require__(14);
-var minimist = __webpack_require__(15);
-var prettier = __webpack_require__(17);
-var lib_1 = __webpack_require__(10);
-var helpers_1 = __webpack_require__(6);
+var fp = __webpack_require__(2);
+var jsonschema = __webpack_require__(27);
+var minimist = __webpack_require__(28);
+var prettier = __webpack_require__(8);
+var lib_1 = __webpack_require__(13);
+var helpers_1 = __webpack_require__(10);
+// TODO this is a hack, we should be dynamically importing these
+var writers_1 = __webpack_require__(18);
 function printUsage() {
     // TODO read from package.json
     var version = '0.0.0';
@@ -199,7 +261,7 @@ function printUsage() {
 function parseArgs() {
     var defaults = {
         stack: '$webdev-genstack',
-        defFile: 'app.def.json'
+        defFile: 'app.def.json',
     };
     var optionAliases = {
         defFile: ['f', 'def-file'],
@@ -218,6 +280,7 @@ function parseArgs() {
     // the sole argument is the directory containing app schema
     var dir = argv._[0] ? argv._[0] : process.env.cwd();
     argv.workingDir = fp.resolve(dir);
+    console.log('argv', JSON.stringify(argv, null, 2));
     return argv;
 }
 var argv = parseArgs();
@@ -276,14 +339,12 @@ function validate(ctx) {
 // The list of writers determines what gets written to the results data
 function getWritersList(ctx) {
     return __awaiter(this, void 0, void 0, function () {
-        var writers;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, Promise.resolve().then(function () { return !(function webpackMissingModule() { var e = new Error("Cannot find module \".\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()); })];
-                case 1:
-                    writers = (_a.sent()).writers;
-                    return [2 /*return*/, writers];
-            }
+            // TODO this should import from compiled stack, we're jumping through hoops
+            // to work with dirs as-is
+            // console.log('ctx.stack', ctx.stack);
+            // const {writers} = await import(ctx.stack);
+            return [2 /*return*/, writers_1.writers()];
         });
     });
 }
@@ -327,7 +388,7 @@ main().catch(function (err) {
 /* WEBPACK VAR INJECTION */}.call(exports, "/", "/index.js"))
 
 /***/ }),
-/* 6 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -369,12 +430,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-var fp = __webpack_require__(0);
-var fs = __webpack_require__(13);
-var mkdirp = __webpack_require__(16);
-var promisify = __webpack_require__(12);
-var stripJsonComments = __webpack_require__(18);
-var log_1 = __webpack_require__(3);
+var fp = __webpack_require__(2);
+var fs = __webpack_require__(26);
+var mkdirp = __webpack_require__(29);
+var promisify = __webpack_require__(25);
+var stripJsonComments = __webpack_require__(30);
+var log_1 = __webpack_require__(6);
 // TODO this is expected to run only in node.. do something to enforce that or something
 // TODO doesn't get the correct type, had to manually add
 var readFile = promisify(fs.readFile);
@@ -382,7 +443,9 @@ exports.loadCommentedJson = function (path) { return __awaiter(_this, void 0, vo
     var contents, stripped, parsed;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, readFile(path, { encoding: 'utf8' })];
+            case 0:
+                console.log('loadCommentedJson:path', path);
+                return [4 /*yield*/, readFile(path, { encoding: 'utf8' })];
             case 1:
                 contents = _a.sent();
                 stripped = stripJsonComments(contents);
@@ -405,54 +468,15 @@ exports.log = log_1.logger('task:gen');
 
 
 /***/ }),
-/* 7 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var lodash_1 = __webpack_require__(4);
-// TODO is hacky, should probably follow relative path on def tree.
-exports.extractRefTypeTitle = function ($ref) {
-    return lodash_1.last($ref.split('/')) || '';
-};
-exports.lookupDef = function (d, $ref) {
-    return d.definitions[exports.extractRefTypeTitle($ref)];
-};
-exports.getActions = function (d) {
-    return d.definitions.Action.oneOf.map(function (a) {
-        return exports.lookupDef(d, a.$ref || '');
-    });
-};
-// TODO check recursively
-// export const inheritsFrom = ($ref: string) => (
-//   d: SchemaDefinition,
-// ): boolean => !!d.allOf && d.allOf.some(a => a.$ref === $ref);
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(7));
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var types_1 = __webpack_require__(1);
-var validate_1 = __webpack_require__(2);
-var log_1 = __webpack_require__(3);
+var types_1 = __webpack_require__(4);
+var validate_1 = __webpack_require__(5);
+var log_1 = __webpack_require__(6);
 var log = log_1.logger('gen');
 // TODO consider making this async, or at least allowing writers to use promises
 // Writers are reducers, pure functions that return state as a function of,
@@ -471,7 +495,28 @@ exports.generate = function (ctx, writers) {
 
 
 /***/ }),
-/* 10 */
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isJs = function (file) { return !!file.path.match(/^.+\.js$/g); };
+exports.isTs = function (file) { return !!file.path.match(/^.+\.(ts|tsx)$/g); };
+exports.isJsLike = function (file) { return !!file.path.match(/^.+\.(js|ts|tsx)$/g); };
+exports.renderOpenMultilineComment = function (file) {
+    return exports.isJsLike(file) ? '/*' : '/*';
+};
+exports.renderCloseMultilineComment = function (file) {
+    return exports.isJsLike(file) ? '*/' : '*/';
+};
+exports.renderComment = function (file, contents) {
+    return ("\n" + exports.renderOpenMultilineComment(file) + "\n" + contents + "\n" + exports.renderCloseMultilineComment(file) + "\n  ").trim();
+};
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -480,11 +525,11 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(8));
-__export(__webpack_require__(9));
 __export(__webpack_require__(1));
-__export(__webpack_require__(2));
-var fp = __webpack_require__(0);
+__export(__webpack_require__(11));
+__export(__webpack_require__(4));
+__export(__webpack_require__(5));
+var fp = __webpack_require__(2);
 //// TODO should be discovered
 // user's working project dir
 exports.userProjectDir = function () { return fp.resolve(__dirname, '../_userProject'); };
@@ -498,64 +543,582 @@ exports.genPackageDir = function () { return '../../src/gen'; };
 /* WEBPACK VAR INJECTION */}.call(exports, "/"))
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-function webpackEmptyContext(req) {
-	throw new Error("Cannot find module '" + req + "'.");
-}
-webpackEmptyContext.keys = function() { return []; };
-webpackEmptyContext.resolve = webpackEmptyContext;
-module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 11;
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = require("es6-promisify");
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = require("fs");
-
-/***/ }),
 /* 14 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("jsonschema");
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(12);
+exports.writeFileContents = function (ctx, file) {
+    var header = h.renderComment(file, ("\n~!! WARNING !!~\n~!! This is an auto-generated file.\n~!! All edits will be lost!\n\n" + ctx.defPath + "\n    |> " + file.writerName + "\n    |> " + file.path + "\n\n~!! This is an auto-generated file.\n~!! All edits will be lost!\n~!! WARNING !!~\n  ").trim());
+    var footer = header;
+    return ("\n" + header + "\n\n" + file.contents + "\n\n" + footer + "\n  ").trim();
+};
+function fileWrapperWriter(results, ctx) {
+    return __assign({}, results, { files: results.files.map(function (f) { return (__assign({}, f, { contents: exports.writeFileContents(ctx, f) })); }) });
+}
+exports.fileWrapperWriter = fileWrapperWriter;
+
 
 /***/ }),
 /* 15 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("minimist");
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(14));
+
 
 /***/ }),
 /* 16 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("mkdirp");
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/*
+`is` is useful for assertions, like in switch case default blocks, eg:
+    switch (foo) {
+      cases...
+      default: is<never>(foo); // compile-time exhaustivity checking! if only there was pattern matching.
+    }
+*/
+exports.is = function (a) { return a; };
+
 
 /***/ }),
 /* 17 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("prettier");
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var defs_1 = __webpack_require__(1);
+/*
+
+This code is really rough - it's a bunch of helpers for TypeScript code generation.
+It needs a lot more features and clarity of design.
+Most of it should probably be made more generic over the file type and moved to `./helpers.ts.
+
+*/
+exports.primitiveTypes = ['string', 'number', 'boolean', 'null', 'undefined', 'object', 'any'];
+function renderQmark(prop, propName) {
+    return prop.required && prop.required.includes(propName) ? '' : '?';
+}
+exports.renderQmark = renderQmark;
+function renderArrayType(prop) {
+    return prop.items && prop.items.$ref ? defs_1.extractRefTypeTitle(prop.items.$ref) : ''; // TODO this is a huge hack
+}
+exports.renderArrayType = renderArrayType;
+function renderTypeUnion(prop, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return prop.oneOf ? prop.oneOf.map(function (v) { return renderPropertyType(v, refTypePrefix); }).join(' | ') : '';
+}
+exports.renderTypeUnion = renderTypeUnion;
+function renderEnumType(prop, refTypePrefix, isDeclaration) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    if (isDeclaration === void 0) { isDeclaration = false; }
+    if (!prop.enum) {
+        return '';
+    }
+    if (!prop.title) {
+        return prop.enum.map(function (v) { return "'" + v + "'"; }).join(' | ');
+    }
+    if (isDeclaration) {
+        return ("\n      {\n        " + prop.enum.map(function (v) { return "" + v; }).join(',\n') + "\n      }\n    ").trim();
+    }
+    return "" + refTypePrefix + prop.title;
+}
+exports.renderEnumType = renderEnumType;
+function renderEnumTypeUnion(prop) {
+    return prop.enum ? prop.enum.map(function (v) { return "'" + v + "'"; }).join(' | ') : '';
+}
+exports.renderEnumTypeUnion = renderEnumTypeUnion;
+function renderEnumValues(prop, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return prop.enum
+        ? prop.enum.map(function (v) { return (prop.title ? "" + refTypePrefix + prop.title + "." + v : "'" + v + "'"); }).join(', ')
+        : '';
+}
+exports.renderEnumValues = renderEnumValues;
+function renderPrimitivePropertyType(prop) {
+    if (prop.type === 'object') {
+        // return prop.type;
+        return "\n      {\n        " + renderPropList(prop, undefined, '', renderPropertyPairNameToType) + "\n      }\n    ";
+    }
+    else {
+        return prop.type || '';
+    }
+}
+exports.renderPrimitivePropertyType = renderPrimitivePropertyType;
+function renderPropertyType(prop, refTypePrefix, isDeclaration) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    if (isDeclaration === void 0) { isDeclaration = false; }
+    if (prop.$ref) {
+        return prop.value !== undefined // TODO could replace all of this branching with a switch() over a declarative kind
+            ? "" + refTypePrefix + defs_1.extractRefTypeTitle(prop.$ref) + "." + prop.value
+            : "" + refTypePrefix + defs_1.extractRefTypeTitle(prop.$ref);
+    }
+    else if (prop.value !== undefined) {
+        return "" + JSON.stringify(prop.value);
+    }
+    else if (prop.type && exports.primitiveTypes.includes(prop.type)) {
+        return renderPrimitivePropertyType(prop);
+    }
+    else if (prop.type === 'array') {
+        return renderArrayType(prop) + "[]";
+    }
+    else if (prop.oneOf) {
+        return renderTypeUnion(prop, refTypePrefix);
+    }
+    else if (prop.enum) {
+        return renderEnumType(prop, refTypePrefix, isDeclaration);
+    }
+    else {
+        return "'" + prop.type + "'";
+    }
+}
+exports.renderPropertyType = renderPropertyType;
+function renderInterfaceExtendType(prop, refTypePrefix, isDeclaration) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    if (isDeclaration === void 0) { isDeclaration = false; }
+    return prop.allOf
+        ? "extends " + prop.allOf
+            .map(function (p) { return renderPropertyType(p, refTypePrefix, isDeclaration); })
+            .join(', ')
+        : '';
+}
+exports.renderInterfaceExtendType = renderInterfaceExtendType;
+function renderRandomValue(prop, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    // TODO huge temp hack ...wait that's everything, and it's not temp at all
+    if (prop.properties) {
+        return ("\n      {\n        " + renderPropList(prop) + "\n      }\n    ").trim();
+    }
+    else if (prop.$ref) {
+        return prop.value !== undefined
+            ? "" + refTypePrefix + h.extractRefTypeTitle(prop.$ref) + "." + prop.value // TODO this is hardcoded for enums, or namespacing at least
+            : refTypePrefix + "mock" + defs_1.extractRefTypeTitle(prop.$ref) + "()"; // TODO hmm? could do this at gen-time
+    }
+    else if (prop.value !== undefined) {
+        return typeof prop.value === 'string' ? "'" + prop.value + "'" : JSON.stringify(prop.value);
+    }
+    else if (prop.oneOf) {
+        return "sample([" + prop.oneOf
+            .map(function (p) { return renderRandomValue(p, refTypePrefix); })
+            .join(', ') + "]) as " + (prop.title ? "" + refTypePrefix + prop.title : renderTypeUnion(prop)); // TODO is hack to get around string literal problem from sample
+    }
+    else if (prop.enum) {
+        return "sample([" + renderEnumValues(prop) + "]) as " + renderEnumType(prop); // TODO is hack to get around string literal problem from sample
+    }
+    else {
+        switch (prop.type) {
+            case 'string':
+                return prop.title === 'Id' ? 'rand.id()' : 'rand.str()'; // TODO refactor
+            case 'integer':
+                return 'rand.int()';
+            case 'number':
+                return 'rand.num()';
+            case 'object':
+                return "{}";
+            case 'null':
+                return 'null';
+            case 'boolean':
+                return 'sample([true, false]) as boolean';
+            case 'array':
+                return "[]";
+            default:
+                return "'FIXMEtype:" + prop.type + "'";
+        }
+    }
+}
+exports.renderRandomValue = renderRandomValue;
+function renderPropertyPairNameToValue(prop, propName, parentProp, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return propName + ": " + renderRandomValue(prop, refTypePrefix);
+}
+exports.renderPropertyPairNameToValue = renderPropertyPairNameToValue;
+function renderPropertyPairNameToType(prop, propName, parentProp, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return "" + propName + renderQmark(parentProp, propName) + ": " + renderPropertyType(prop, refTypePrefix);
+}
+exports.renderPropertyPairNameToType = renderPropertyPairNameToType;
+function renderCallingArgs(prop, propName, parentProp, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return renderRandomValue(prop, refTypePrefix);
+}
+exports.renderCallingArgs = renderCallingArgs;
+// TODO callingPropList vs declarationPropList
+function renderPropList(prop, separator, refTypePrefix, fn) {
+    if (separator === void 0) { separator = ',\n'; }
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    if (fn === void 0) { fn = renderPropertyPairNameToValue; }
+    return prop.properties
+        ? Object.keys(prop.properties)
+            .map(function (propName) {
+            // tslint:disable-next-line:no-non-null-assertion
+            return fn(prop.properties[propName], propName, prop, refTypePrefix);
+        })
+            .filter(function (p) { return p; })
+            .join(separator)
+        : '';
+}
+exports.renderPropList = renderPropList;
+var TypeDeclarationKind;
+(function (TypeDeclarationKind) {
+    TypeDeclarationKind[TypeDeclarationKind["TypeLiteral"] = 0] = "TypeLiteral";
+    TypeDeclarationKind[TypeDeclarationKind["Enum"] = 1] = "Enum";
+    TypeDeclarationKind[TypeDeclarationKind["Interface"] = 2] = "Interface";
+})(TypeDeclarationKind = exports.TypeDeclarationKind || (exports.TypeDeclarationKind = {}));
+// TODO makes me think `SchemaProperty` should be a union type, instead of inferring it
+exports.inferTypeDeclarationKind = function (definition) {
+    if (definition.oneOf ||
+        (definition.type && definition.type !== 'array' && definition.type !== 'object')) {
+        return TypeDeclarationKind.TypeLiteral;
+    }
+    else if (definition.enum) {
+        return TypeDeclarationKind.Enum;
+    }
+    else {
+        return TypeDeclarationKind.Interface;
+    }
+};
+function renderTypeDeclaration(definition) {
+    // TODO this should be a helper
+    var typeDeclarationKind = exports.inferTypeDeclarationKind(definition);
+    switch (typeDeclarationKind) {
+        case TypeDeclarationKind.TypeLiteral:
+            return ("\n        export type " + definition.title + " = " + renderPropertyType(definition, '') + ";\n      ").trim();
+        case TypeDeclarationKind.Enum:
+            return ("\n        export enum " + definition.title + renderPropertyType(definition, '', true) + ";\n      ").trim();
+        case TypeDeclarationKind.Interface:
+            return ("\n        export interface " + definition.title + " " + renderInterfaceExtendType(definition, '', false) + " {\n          " + renderPropList(definition, ';\n', '', renderPropertyPairNameToType) + "\n        }\n      ").trim();
+        default:
+            h.is(typeDeclarationKind);
+            throw Error();
+    }
+}
+exports.renderTypeDeclaration = renderTypeDeclaration;
+function renderActionCreatorCall(def, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return ("\n  " + refTypePrefix + renderActionCreatorName(def) + "(\n    " + renderPropList((def.properties && def.properties.payload) || {}, undefined, refTypePrefix, renderCallingArgs) + "\n  )\n  ").trim();
+}
+exports.renderActionCreatorCall = renderActionCreatorCall;
+function renderPropertiesObjectLiteral(prop, separator) {
+    if (separator === void 0) { separator = ',\n'; }
+    return prop.type === 'object'
+        ? ("\n      {\n        " + ((prop.properties && Object.keys(prop.properties).join(separator)) || '') + "\n      }\n      ").trim()
+        : 'null';
+}
+exports.renderPropertiesObjectLiteral = renderPropertiesObjectLiteral;
+var ACTION_SUFFIX = 'Action';
+var ACTION_SUFFIX_LENGTH = ACTION_SUFFIX.length;
+function renderActionCreatorName(def) {
+    return def.title[0].toLowerCase() + def.title.slice(1, def.title.length - ACTION_SUFFIX_LENGTH);
+}
+exports.renderActionCreatorName = renderActionCreatorName;
+function renderActionTypeValue(def, refTypePrefix) {
+    if (refTypePrefix === void 0) { refTypePrefix = 't.'; }
+    return "" + refTypePrefix + def.title;
+}
+exports.renderActionTypeValue = renderActionTypeValue;
+
 
 /***/ }),
 /* 18 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("strip-json-comments");
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var writers_1 = __webpack_require__(15);
+var tsActionTestWriter_1 = __webpack_require__(19);
+var tsActionWriter_1 = __webpack_require__(20);
+var tsDefWriter_1 = __webpack_require__(21);
+var tsMockWriter_1 = __webpack_require__(22);
+var tsReducerTestWriter_1 = __webpack_require__(23);
+var tsTypeWriter_1 = __webpack_require__(24);
+exports.writers = function () { return [
+    tsDefWriter_1.tsDefWriter,
+    tsTypeWriter_1.tsTypeWriter,
+    tsMockWriter_1.tsMockWriter,
+    tsActionWriter_1.tsActionWriter,
+    tsActionTestWriter_1.tsActionTestWriter,
+    tsReducerTestWriter_1.tsReducerTestWriter,
+    writers_1.fileWrapperWriter,
+]; };
+
 
 /***/ }),
 /* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(5);
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var defs_1 = __webpack_require__(1);
+var writeContents = function (path, def, results) {
+    return ("\n    // TODO make these tests more robust - like with snapshot testing\n\n    import * as rand from '$utils/rand';\n    import * as u from '$utils/is';\n    import * as a from './actions.gen';\n    import * as t from './types.gen';\n\n    " + defs_1.getActions(def)
+        .map(function (a) {
+        return ("\n        it('calls the " + a.title + " creator', () => {\n          const action = " + h.renderActionCreatorCall(a, 'a.') + ";\n          u.is<" + h.renderActionTypeValue(a, 't.') + ">(action);\n        });\n        ").trim();
+    })
+        .join('\n\n') + "\n  ").trim();
+};
+function tsActionTestWriter(results, ctx) {
+    var path = ctx.outputDir + "/actions.gen.test.ts";
+    return __assign({}, results, { files: results.files.concat({
+            path: path,
+            contents: writeContents(path, ctx.def, results),
+            writerName: tsActionTestWriter.name,
+        }) });
+}
+exports.tsActionTestWriter = tsActionTestWriter;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var defs_1 = __webpack_require__(1);
+// TODO should probably be renamed
+var writeContents = function (def) {
+    return ("\n  import * as t from './types.gen';\n\n  " + defs_1.getActions(def)
+        .map(function (a) {
+        return ("\n      export const " + h.renderActionCreatorName(a) + " = (\n        " + h.renderPropList((a.properties && a.properties.payload) || {}, undefined, undefined, function (prop, propName, parentProp) {
+            return propName === 'type' ? '' : h.renderPropertyPairNameToType(prop, propName, parentProp);
+        }) + "\n      ): t." + a.title + " => ({\n        type: t.ActionType." + a.title + ",\n        " + (a.properties && a.properties.payload
+            ? "payload: " + h.renderPropertiesObjectLiteral(a.properties.payload) + ","
+            : '') + "\n      })\n      ").trim();
+    })
+        .join('\n\n') + "\n\n  ").trim();
+};
+function tsActionWriter(results, ctx) {
+    var path = ctx.outputDir + "/actions.gen.ts";
+    return __assign({}, results, { files: results.files.concat({
+            path: path,
+            contents: writeContents(ctx.def),
+            writerName: tsActionWriter.name,
+        }) });
+}
+exports.tsActionWriter = tsActionWriter;
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var prettier = __webpack_require__(8);
+var writeContents = function (def, prettierCfg) {
+    return ("\n  import {AppDef} from '$sculpt';\n\n  export const " + def.name + "Def: AppDef = {\n    " + Object.keys(def).map(function (d) {
+        if (d === 'definitions') {
+            return "\n          " + d + ": {\n              " + Object.keys(def[d]).map(function (defName) { return "\n                    " + defName + ": " + JSON.stringify(__assign({}, def[d][defName], { code: {
+                    declaration: prettier.format(h.renderTypeDeclaration(def.definitions[defName]), prettierCfg),
+                }, title: defName }), null, 2) + "\n              "; }) + "\n          }\n            ";
+        }
+        else {
+            return d + ": " + JSON.stringify(def[d], null, 2);
+        }
+    }) + "\n  };\n  ").trim();
+};
+function tsDefWriter(results, ctx) {
+    var path = ctx.outputDir + "/def.gen.ts";
+    return __assign({}, results, { files: results.files.concat({
+            path: path,
+            contents: writeContents(ctx.def, ctx.prettierCfg),
+            writerName: tsDefWriter.name,
+        }) });
+}
+exports.tsDefWriter = tsDefWriter;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var writeContents = function (path, def, results) {
+    return ("\n  import {sample} from 'lodash';\n\n  import * as t from './types.gen';\n\n  " + Object.keys(def.definitions)
+        .map(function (d) {
+        var definition = def.definitions[d];
+        return ("\n        export const mock" + definition.title + " = (): t." + d + " => (\n          " + h.renderRandomValue(definition) + "\n        );\n      ").trim();
+    })
+        .join('\n\n') + "\n  ").trim();
+};
+function tsMockWriter(results, ctx) {
+    var path = ctx.outputDir + "/mocks.gen.ts";
+    return __assign({}, results, { files: results.files.concat({
+            path: path,
+            contents: writeContents(path, ctx.def, results),
+            writerName: tsMockWriter.name,
+        }) });
+}
+exports.tsMockWriter = tsMockWriter;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var defs_1 = __webpack_require__(1);
+var writeContents = function (path, def, results) {
+    return ("\n    // TODO make these tests more robust - like with snapshot testing\n    // problem is snapshot testing doesn't play nicely with ids\n\n    import * as rand from '$utils/rand';\n    import * as t from './types.gen';\n\n    import {reducer} from './index';\n\n    " + defs_1.getActions(def)
+        .map(function (a) {
+        return ("\n        it('applies a " + a.title + " against the store state', () => {\n          const state = reducer(undefined, " + h.renderActionCreatorCall(a) + ");\n          t.is<t.ClientState>(state);\n        });\n        ").trim();
+    })
+        .join('\n\n') + "\n  ").trim();
+};
+function tsReducerTestWriter(results, ctx) {
+    var path = ctx.outputDir + "/reducer.gen.test.ts";
+    return __assign({}, results, { files: results.files.concat({
+            path: path,
+            contents: writeContents(path, ctx.def, results),
+            writerName: tsReducerTestWriter.name,
+        }) });
+}
+exports.tsReducerTestWriter = tsReducerTestWriter;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var h = __webpack_require__(0);
+var writeContents = function (path, def, results) {
+    return ("\n  " + Object.keys(def.definitions).map(function (d) { return h.renderTypeDeclaration(def.definitions[d]); }).join('\n\n') + "\n  ").trim();
+};
+function tsTypeWriter(results, ctx) {
+    var path = ctx.outputDir + "/types.gen.ts";
+    return __assign({}, results, { files: results.files.concat({
+            path: path,
+            contents: writeContents(path, ctx.def, results),
+            writerName: tsTypeWriter.name,
+        }) });
+}
+exports.tsTypeWriter = tsTypeWriter;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("es6-promisify");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = require("jsonschema");
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+module.exports = require("minimist");
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
+
+module.exports = require("mkdirp");
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+module.exports = require("strip-json-comments");
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(9);
 
 
 /***/ })

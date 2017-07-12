@@ -8,8 +8,8 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
     // TODO make these tests more robust - like with snapshot testing
     // problem is snapshot testing doesn't play nicely with ids
 
-    import * as rand from '../../../utils/rand';
-    import * as t from '../types';
+    import * as rand from '$utils/rand';
+    import * as t from './types.gen';
 
     import {reducer} from './index';
 
@@ -26,7 +26,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `.trim();
 
 export function tsReducerTestWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `${ctx.outputDir}/${ctx.def.name}.reducer.gen.test.ts`;
+  const path = `${ctx.outputDir}/reducer.gen.test.ts`;
   return {
     ...results,
     files: results.files.concat({

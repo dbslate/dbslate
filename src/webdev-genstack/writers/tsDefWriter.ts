@@ -7,7 +7,7 @@ import {AppDef} from '$sculpt/defs';
 
 const writeContents = (def: AppDef, prettierCfg: object): string =>
   `
-  import {AppDef} from '../../gen';
+  import {AppDef} from '$sculpt';
 
   export const ${def.name}Def: AppDef = {
     ${Object.keys(def).map(d => {
@@ -42,7 +42,7 @@ const writeContents = (def: AppDef, prettierCfg: object): string =>
   `.trim();
 
 export function tsDefWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `${ctx.outputDir}/${ctx.def.name}.def.gen.ts`;
+  const path = `${ctx.outputDir}/def.gen.ts`;
   return {
     ...results,
     files: results.files.concat({
