@@ -1,7 +1,7 @@
-import {logger} from '../utils/log';
-
 import {GenCtx, Writer, WriterResults, getDefaultResultsData} from './types';
 import {validateResults, validateWriters} from './validate';
+
+import {logger} from '$utils/log';
 
 const log = logger('gen');
 

@@ -1,9 +1,9 @@
+import * as fp from 'path';
 import * as fs from 'fs';
 import * as mkdirp from 'mkdirp';
 import * as promisify from 'es6-promisify';
 import * as stripJsonComments from 'strip-json-comments';
 
-import {Writer} from '../lib/types';
 import {logger} from '$utils/log';
 
 // TODO this is expected to run only in node.. do something to enforce that or something
@@ -20,15 +20,14 @@ export const loadCommentedJson = async (path: string): Promise<any> => {
   return parsed;
 };
 
-export function saveFile(destPath: string, contents: string): void {
-  log('saving', destPath);
-  const finalDestPath = fp.join(appDir, destPath);
+export function saveFile(filename: string, contents: string): void {
+  log('saving', filename);
   // ensure dir exists
-  mkdirp.sync(fp.dirname(finalDestPath));
-  fs.writeFileSync(finalDestPath, contents, {
+  mkdirp.sync(fp.dirname(filename));
+  fs.writeFileSync(filename, contents, {
     encoding: 'utf8',
   });
-  log('saved~', finalDestPath);
+  log('saved~', filename);
 }
 
 export const log = logger('task:gen');

@@ -15,7 +15,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "lint": "tslint --format stylish --project tsconfig.json --type-check",
-    "gen": "node scripts/gen.js"
+    "gen": "node scripts/gen.js",
+    "build:sculpt": "node scripts/compile.js src/sculpt/src/cmd/main.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

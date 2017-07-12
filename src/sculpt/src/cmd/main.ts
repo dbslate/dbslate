@@ -13,7 +13,7 @@ function printUsage():void {
   const version = '0.0.0';
   const usage = `
 sculpt ${version} - next generation generation
-usage: sculpt [options]
+usage: sculpt [options] dir
 
 options:
   ?, help         Shows this screen
@@ -31,14 +31,11 @@ options:
  */
 function parseArgs(): minimist.ParsedArgs {
   const defaults = {
-    baseDir: process.env.cwd(),
-    outputDir: process.env.cwd(),
     stack: '$webdev-genstack',
-    defFile: 'defs/app.def.json'
+    defFile: 'app.def.json'
   };
   const optionAliases = {
     defFile: ['f', 'def-file'],
-    outputDir: ['d', 'output-dir'],
     verbose: ['v'],
   };
   const treatAsBools = ['help', 'verbose'];
@@ -53,6 +50,10 @@ function parseArgs(): minimist.ParsedArgs {
     printUsage();
     process.exit(0);
   }
+
+  // the sole argument is the directory containing app schema
+  const dir = argv._[0] ? argv._[0] : process.env.cwd();
+  argv.workingDir = fp.resolve(dir);
   return argv;
 }
 
@@ -60,8 +61,10 @@ const argv = parseArgs();
 
 async function buildContext(): Promise<GenCtx> {
   // TODO config/env
-  const appDefPath = fp.join(argv.baseDir, argv.defFile);
-  // TODO not sure if this should be part of GenCtx
+  const appDefPath = fp.join(argv.workingDir, argv.defFile);
+
+  // TODO not sure if this should be part of GenCtx and this will break
+  // since it assumes sculpt is running at dbslate project root
   const prettierCfgPath = 'config/prettier.json';
 
   const prettierCfg = await loadCommentedJson(prettierCfgPath);
@@ -71,7 +74,7 @@ async function buildContext(): Promise<GenCtx> {
     defPath: appDefPath,
     def: await loadCommentedJson(appDefPath),
     prettierCfg,
-    outputDir: argv.outputDir,
+    outputDir: fp.join(argv.workingDir, '_sculpted'),
     stack: argv.stack,
   };
 

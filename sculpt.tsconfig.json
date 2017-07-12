@@ -1,0 +1,66 @@
+// Compiling with main tsconfig.json requires everything compiles. Sculpt
+// needs to compile on its own. The only real change is {include}
+{
+  "compilerOptions": {
+    "outDir": "build",
+    "module": "commonjs",
+    "target": "es5",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "plugins": [
+      {
+        "name": "tslint-language-service",
+        "alwaysShowRuleFailuresAsWarnings": false
+        //"ignoreDefinitionFiles": true
+        //"configFile": "tslint.json"
+        //"disableNoUnusedVariableRule": false
+      }
+    ],
+
+    // path aliases
+    "baseUrl": ".",
+    "paths": {
+      // TODO these will be their own packages (monorepo)
+      "$sculpt": ["src/sculpt/src/lib"],
+      "$sculpt/*": ["src/sculpt/src/lib/*"],
+      "$webdev-genstack": ["src/webdev-genstack"],
+      "$webdev-genstack/*": ["src/webdev-genstack/*"],
+      "$utils/*": ["src/utils/*"],
+
+      // this should not be used but temporarily in place for refactoring
+      "$USERPROJECT/*": ["src/_userProject/*"]
+    }
+  },
+  "include": [
+    "src/sculpt/*",
+    "src/utils/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts",
+    "config"
+  ],
+  "types": [
+    "typePatches"
+  ]
+}

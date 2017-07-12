@@ -5,21 +5,18 @@ const nodeExternals = require('webpack-node-externals');
 const compact = require('lodash/compact');
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
+const tsConfig = process.env.ts_config;
 const entryFile = process.env.entry_file;
-const outputFilename = fp.join(
-  fp.dirname(entryFile).replace(/^src\//, ''),
-  fp.basename(entryFile, fp.extname(entryFile)) + '.js'
-);
+const outputFile = process.env.output_file;
 
-console.log(`[compile] Compiling ${entryFile} to ${outputFilename}`);
+console.log(`[compile] Compiling ${entryFile} to ${outputFile}`);
 
 const config = {
   entry: [fp.resolve(entryFile)], // must be filled in
   target: 'node',
   output: {
-    path: fp.resolve(__dirname, '../build'), // needs to be at same depth as thing being built
-    filename: outputFilename, // must be filled in
-    publicPath: fp.resolve(__dirname, '../public'),
+    path: fp.resolve(fp.dirname(outputFile)),
+    filename: fp.basename(outputFile),
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
@@ -35,8 +32,11 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['ts-loader'],
+        loader: 'ts-loader',
         include: fp.resolve(__dirname, '..'),
+        options: {
+          configFileName: tsConfig,
+        },
       },
     ],
   },
