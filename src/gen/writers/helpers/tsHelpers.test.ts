@@ -107,25 +107,13 @@ it(`renders the extends portion of an interface for a property`, () => {
   );
 });
 
-// it(``, () => {
-//   expect().toBe();
-// });
+it(`renders a random value for a property`, () => {
+  expect(h.renderRandomValue({value: 5})).toBe('5');
+});
 
 // it(``, () => {
 //   expect().toBe();
 // });
-
-// export function renderInterfaceExtendType(
-//   prop: SchemaProperty,
-//   refTypePrefix: string = 't.',
-//   isDeclaration: boolean = false,
-// ): string {
-//   return prop.allOf
-//     ? `extends ${prop.allOf
-//         .map(p => renderPropertyType(p, refTypePrefix, isDeclaration))
-//         .join(', ')}`
-//     : '';
-// }
 
 // export function renderRandomValue(
 //   prop: SchemaProperty,
