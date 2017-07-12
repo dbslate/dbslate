@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "build",
     "module": "commonjs",
-    "target": "esnext",
+    "target": "es5",
     "lib": [
       "es2017",
       "dom"

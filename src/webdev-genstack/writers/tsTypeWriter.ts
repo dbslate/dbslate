@@ -10,7 +10,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `.trim();
 
 export function tsTypeWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `types/${ctx.def.name}.types.gen.ts`;
+  const path = `client/types/${ctx.def.name}.types.gen.ts`;
   return {
     ...results,
     files: results.files.concat({

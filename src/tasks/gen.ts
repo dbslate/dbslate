@@ -1,6 +1,7 @@
 import * as fp from 'path';
 import * as fs from 'fs';
 import * as jsonschema from 'jsonschema';
+import * as mkdirp from 'mkdirp';
 import * as prettier from 'prettier';
 
 import {GenCtx, generate} from '$gen';
@@ -20,14 +21,16 @@ TODO need better workflow
 */
 
 // TODO config/env
-const appDir = '../_userProject';
+const appDir = 'src/_userProject';
 const appDefPath = `${appDir}/defs/app.def.json`;
-const prettierCfgPath = '../../config/prettier.json';
-const baseSchemaPath = '../gen/defs/jsonschema-meta.json';
+const prettierCfgPath = 'config/prettier.json';
+const baseSchemaPath = 'src/gen/defs/jsonschema-meta.json';
 
 const saveFile = (destPath: string, contents: string): void => {
   log('saving', destPath);
   const finalDestPath = fp.join(appDir, destPath);
+  // ensure dir exists
+  mkdirp.sync(fp.dirname(finalDestPath));
   fs.writeFileSync(finalDestPath, contents, {
     encoding: 'utf8',
   });

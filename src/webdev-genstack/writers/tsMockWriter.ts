@@ -1,7 +1,8 @@
-import {AppDef} from '$gen/defs';
+import * as h from '../helpers';
+
 import {GenCtx, WriterResults} from '$gen/types';
 
-import * as h from '../helpers';
+import {AppDef} from '$gen/defs';
 
 const writeContents = (path: string, def: AppDef, results: WriterResults): string =>
   `
@@ -23,7 +24,7 @@ const writeContents = (path: string, def: AppDef, results: WriterResults): strin
   `.trim();
 
 export function tsMockWriter(results: WriterResults, ctx: GenCtx): WriterResults {
-  const path = `types/${ctx.def.name}.mocks.gen.ts`;
+  const path = `client/types/${ctx.def.name}.mocks.gen.ts`;
   return {
     ...results,
     files: results.files.concat({

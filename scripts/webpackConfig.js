@@ -8,12 +8,15 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const entryFile = fp.resolve(process.env.entry_file);
 const outputFilename = fp.basename(entryFile, fp.extname(entryFile)) + '.js';
 
+console.log('entryFile', {entryFile, outputFilename});
+
 const config = {
   entry: [entryFile], // must be filled in
   target: 'node',
   output: {
     path: fp.resolve(__dirname, '../build/dist'), // needs to be at same depth as thing being built
     filename: outputFilename, // must be filled in
+    publicPath: fp.resolve(__dirname, '../public'),
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.json', '.jsx'],
@@ -25,8 +28,14 @@ const config = {
     },
   },
   module: {
-    // preLoaders: [{test: /\.ts(x?)$/, loader: 'tslint'}],
-    loaders: [{test: /\.ts(x?)$/, loader: 'ts-loader'}],
+    // preLoaders: [{test: /\.ts|\.tsx$/, loader: 'tslint'}],
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: ['ts-loader'],
+        include: fp.resolve(__dirname, '..'),
+      },
+    ],
   },
   externals: [nodeExternals()],
   devtool: NODE_ENV === 'development' ? 'sourcemap' : null,
@@ -40,24 +49,24 @@ const config = {
         })
       : null,
 
-    {
-      apply(compiler) {
-        function setModuleConstant(expressionName, fn) {
-          compiler.parser.plugin('expression ' + expressionName, function() {
-            this.state.current.addVariable(expressionName, JSON.stringify(fn(this.state.module)));
-            return true;
-          });
-        }
+    // {
+    //   apply(compiler) {
+    //     function setModuleConstant(expressionName, fn) {
+    //       compiler.parser.plugin('expression ' + expressionName, function() {
+    //         this.state.current.addVariable(expressionName, JSON.stringify(fn(this.state.module)));
+    //         return true;
+    //       });
+    //     }
 
-        setModuleConstant('__filename', function(module) {
-          return module.resource;
-        });
+    //     setModuleConstant('__filename', function(module) {
+    //       return module.resource;
+    //     });
 
-        setModuleConstant('__dirname', function(module) {
-          return module.context;
-        });
-      },
-    },
+    //     setModuleConstant('__dirname', function(module) {
+    //       return module.context;
+    //     });
+    //   },
+    // },
   ]),
 };
 
