@@ -107,62 +107,63 @@ it(`renders the extends portion of an interface for a property`, () => {
   );
 });
 
+// TODO possibly `mockRandomProperty` and just run it 100x,
+// or systemically mock each type of possible property
+// makes me think property type should be a union type,
+// and just enumerate each possible type of property as a definition
 it(`renders a random value for a property`, () => {
+  // `properties`
+  expect(
+    h.renderRandomValue({properties: {foo: {value: 5}, bar: {value: 'hi'}}}),
+  ).toBe(`{foo: 5, bar: 'hi'}`);
+
+  // `$ref`
+  expect(h.renderRandomValue({$ref: '#/definitions/Foo'})).toBe('t.mockFoo()');
+  expect(
+    h.renderRandomValue({$ref: '#/definitions/EnumDef', value: 'EnumValue'}),
+  ).toBe('t.EnumDef.EnumValue');
+
+  // `value`
   expect(h.renderRandomValue({value: 5})).toBe('5');
+  expect(h.renderRandomValue({value: 'hi'})).toBe(`'hi'`);
+  expect(h.renderRandomValue({value: {foo: 5}})).toBe(`{"foo":5}`);
+
+  // `oneOf`
+  expect(
+    h.renderRandomValue({
+      title: 'Foo',
+      oneOf: [{$ref: '#/definitions/Bar'}, {value: 5}],
+    }),
+  ).toBe('sample([t.mockBar(), 5]) as t.Foo');
+  expect(
+    h.renderRandomValue({
+      oneOf: [{$ref: '#/definitions/Bar'}, {value: 5}],
+    }),
+  ).toBe('sample([t.mockBar(), 5]) as t.Bar | 5');
+
+  // `enum`
+  expect(
+    h.renderRandomValue({
+      title: 'Foo',
+      enum: ['Bar', 'Baz'],
+    }),
+  ).toBe('sample([t.Foo.Bar, t.Foo.Baz]) as t.Foo');
+
+  // `type`
+  expect(h.renderRandomValue({type: 'string'})).toBe('rand.str()');
+  expect(h.renderRandomValue({type: 'integer'})).toBe('rand.int()');
+  expect(h.renderRandomValue({type: 'number'})).toBe('rand.num()');
+  expect(h.renderRandomValue({type: 'object'})).toBe(`{}`); // TODO values
+  expect(h.renderRandomValue({type: 'null'})).toBe('null');
+  expect(h.renderRandomValue({type: 'boolean'})).toBe(
+    'sample([true, false]) as boolean',
+  );
+  expect(h.renderRandomValue({type: 'array'})).toBe(`[]`); // TODO values
 });
 
 // it(``, () => {
 //   expect().toBe();
 // });
-
-// export function renderRandomValue(
-//   prop: SchemaProperty,
-//   refTypePrefix: string = 't.',
-// ): string {
-//   // TODO huge temp hack ...wait that's everything, and it's not temp at all
-//   if (prop.properties) {
-//     return `
-//       {
-//         ${renderPropList(prop)}
-//       }
-//     `.trim();
-//   } else if (prop.$ref) {
-//     return prop.value !== undefined
-//       ? `${refTypePrefix}${h.extractRefTypeTitle(prop.$ref)}.${prop.value}` // TODO this is hardcoded for enums, or namespacing at least
-//       : `${refTypePrefix}mock${extractRefTypeTitle(prop.$ref)}()`; // TODO hmm? could do this at gen-time
-//   } else if (prop.value !== undefined) {
-//     return typeof prop.value === 'string'
-//       ? `'${prop.value}'`
-//       : JSON.stringify(prop.value);
-//   } else if (prop.oneOf) {
-//     return `sample([${prop.oneOf
-//       .map(p => renderRandomValue(p, refTypePrefix))
-//       .join(', ')}]) as ${prop.title
-//       ? `${refTypePrefix}${prop.title}`
-//       : renderTypeUnion(prop)}`; // TODO is hack to get around string literal problem from sample
-//   } else if (prop.enum) {
-//     return `sample([${renderEnumValues(prop)}]) as ${renderEnumType(prop)}`; // TODO is hack to get around string literal problem from sample
-//   } else {
-//     switch (prop.type) {
-//       case 'string':
-//         return prop.title === 'Id' ? 'rand.id()' : 'rand.str()'; // TODO refactor
-//       case 'integer':
-//         return 'rand.int()';
-//       case 'number':
-//         return 'rand.num()';
-//       case 'object':
-//         return `{}`;
-//       case 'null':
-//         return 'null';
-//       case 'boolean':
-//         return 'sample([true, false]) as boolean';
-//       case 'array':
-//         return `[]`;
-//       default:
-//         return `'FIXMEtype:${prop.type}'`;
-//     }
-//   }
-// }
 
 // export function renderPropertyPairNameToValue(
 //   prop: SchemaProperty,

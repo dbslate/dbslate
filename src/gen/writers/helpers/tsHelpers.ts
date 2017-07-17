@@ -155,18 +155,18 @@ export function renderRandomValue(
   } else {
     switch (prop.type) {
       case 'string':
-        return prop.title === 'Id' ? 'rand.id()' : 'rand.str()'; // TODO refactor
+        return 'rand.str()';
       case 'integer':
         return 'rand.int()';
       case 'number':
         return 'rand.num()';
-      case 'object':
+      case 'object': // TODO values?
         return `{}`;
       case 'null':
         return 'null';
       case 'boolean':
         return 'sample([true, false]) as boolean';
-      case 'array':
+      case 'array': // TODO fill with some random items
         return `[]`;
       default:
         return `'FIXMEtype:${prop.type}'`;
