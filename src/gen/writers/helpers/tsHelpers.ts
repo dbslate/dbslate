@@ -177,7 +177,7 @@ export function renderRandomValue(
 export function renderPropertyPairNameToValue(
   prop: SchemaProperty,
   propName: string,
-  parentProp: SchemaProperty,
+  parentProp: SchemaProperty, // TODO this is unused and weird, see `renderPropList` below for more
   refTypePrefix: string = 't.',
 ): string {
   return `${propName}: ${renderRandomValue(prop, refTypePrefix)}`;
@@ -195,7 +195,7 @@ export function renderPropertyPairNameToType(
   )}`;
 }
 
-export function renderCallingArgs(
+export function renderCallingArgs( // TODO rename?
   prop: SchemaProperty,
   propName: string,
   parentProp: SchemaProperty,
@@ -209,7 +209,7 @@ export function renderPropList(
   prop: SchemaProperty,
   separator: string = ', ',
   refTypePrefix: string = 't.',
-  fn: typeof renderPropertyPairNameToValue = renderPropertyPairNameToValue,
+  fn: typeof renderPropertyPairNameToValue = renderPropertyPairNameToValue, // TODO this is wonky
 ): string {
   return prop.properties
     ? Object.keys(prop.properties)

@@ -161,81 +161,60 @@ it(`renders a random value for a property`, () => {
   expect(h.renderRandomValue({type: 'array'})).toBe(`[]`); // TODO values
 });
 
+it(`renders an object property key/value pair`, () => {
+  expect(
+    h.renderPropertyPairNameToValue({$ref: '#/definitions/Foo'}, 'foo', {}),
+  ).toBe(`foo: t.mockFoo()`);
+});
+
+it(`renders an object property key/type pair`, () => {
+  expect(
+    h.renderPropertyPairNameToType({$ref: '#/definitions/Foo'}, 'foo', {}),
+  ).toBe(`foo?: t.Foo`);
+});
+
+it(`renders a property when it is an arg to a function`, () => {
+  expect(h.renderCallingArgs({$ref: '#/definitions/Foo'}, 'foo', {})).toBe(
+    `t.mockFoo()`,
+  );
+});
+
+it(`renders a property list`, () => {
+  expect(h.renderPropList({value: 5})).toBe('');
+  expect(
+    h.renderPropList({
+      properties: {foo: {value: 5}, bar: {$ref: '#/definitions/Bar'}},
+    }),
+  ).toBe(`foo: 5, bar: t.mockBar()`);
+});
+
+it(`infers a definition's type declaration kind`, () => {
+  expect(
+    h.inferTypeDeclarationKind({title: 'Foo', type: 'number', value: 5}),
+  ).toBe(h.TypeDeclarationKind.TypeLiteral);
+  expect(
+    h.inferTypeDeclarationKind({
+      title: 'Foo',
+      oneOf: [{$ref: '#/definitions/Bar'}, {$ref: '#/definitions/Baz'}],
+    }),
+  ).toBe(h.TypeDeclarationKind.TypeLiteral);
+  expect(
+    h.inferTypeDeclarationKind({
+      title: 'Foo',
+      enum: ['Bar', 'Baz'],
+    }),
+  ).toBe(h.TypeDeclarationKind.Enum);
+  expect(
+    h.inferTypeDeclarationKind({
+      title: 'Foo',
+      $ref: '#/definitions/Foo',
+    }),
+  ).toBe(h.TypeDeclarationKind.Interface);
+});
+
 // it(``, () => {
 //   expect().toBe();
 // });
-
-// export function renderPropertyPairNameToValue(
-//   prop: SchemaProperty,
-//   propName: string,
-//   parentProp: SchemaProperty,
-//   refTypePrefix: string = 't.',
-// ): string {
-//   return `${propName}: ${renderRandomValue(prop, refTypePrefix)}`;
-// }
-
-// export function renderPropertyPairNameToType(
-//   prop: SchemaProperty,
-//   propName: string,
-//   parentProp: SchemaProperty,
-//   refTypePrefix: string = 't.',
-// ): string {
-//   return `${propName}${renderQmark(parentProp, propName)}: ${renderPropertyType(
-//     prop,
-//     refTypePrefix,
-//   )}`;
-// }
-
-// export function renderCallingArgs(
-//   prop: SchemaProperty,
-//   propName: string,
-//   parentProp: SchemaProperty,
-//   refTypePrefix: string = 't.',
-// ): string {
-//   return renderRandomValue(prop, refTypePrefix);
-// }
-
-// // TODO callingPropList vs declarationPropList
-// export function renderPropList(
-//   prop: SchemaProperty,
-//   separator: string = ',\n',
-//   refTypePrefix: string = 't.',
-//   fn: typeof renderPropertyPairNameToValue = renderPropertyPairNameToValue,
-// ): string {
-//   return prop.properties
-//     ? Object.keys(prop.properties)
-//         .map(propName =>
-//           // tslint:disable-next-line:no-non-null-assertion
-//           fn(prop.properties![propName], propName, prop, refTypePrefix),
-//         )
-//         .filter(p => p)
-//         .join(separator)
-//     : '';
-// }
-
-// export enum TypeDeclarationKind {
-//   TypeLiteral,
-//   Enum,
-//   Interface,
-// }
-
-// // TODO makes me think `SchemaProperty` should be a union type, instead of inferring it
-// export const inferTypeDeclarationKind = (
-//   definition: SchemaDefinition,
-// ): TypeDeclarationKind => {
-//   if (
-//     definition.oneOf ||
-//     (definition.type &&
-//       definition.type !== 'array' &&
-//       definition.type !== 'object')
-//   ) {
-//     return TypeDeclarationKind.TypeLiteral;
-//   } else if (definition.enum) {
-//     return TypeDeclarationKind.Enum;
-//   } else {
-//     return TypeDeclarationKind.Interface;
-//   }
-// };
 
 // export function renderTypeDeclaration(definition: SchemaDefinition): string {
 //   // TODO this should be a helper
