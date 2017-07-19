@@ -125,7 +125,7 @@ export function renderInterfaceExtendType(
   return prop.allOf
     ? `extends ${prop.allOf
         .map(p => renderPropertyType(p, refTypePrefix, isDeclaration))
-        .join(', ')}`
+        .join(', ')} `
     : '';
 }
 
@@ -256,7 +256,7 @@ export function renderTypeDeclaration(definition: SchemaDefinition): string {
       `.trim();
     case TypeDeclarationKind.Enum:
       return `
-        export enum ${definition.title}${renderPropertyType(
+        export enum ${definition.title} ${renderPropertyType(
         definition,
         '',
         true,
@@ -268,9 +268,12 @@ export function renderTypeDeclaration(definition: SchemaDefinition): string {
         definition,
         '',
         false,
-      )} {
-          ${renderPropList(definition, ';\n', '', renderPropertyPairNameToType)}
-        }
+      )}{ ${renderPropList(
+        definition,
+        '; ',
+        '',
+        renderPropertyPairNameToType,
+      )} }
       `.trim();
     default:
       h.is<never>(typeDeclarationKind);
@@ -283,34 +286,31 @@ export function renderActionCreatorCall(
   refTypePrefix: string = 't.',
 ): string {
   return `
-  ${refTypePrefix}${renderActionCreatorName(def)}(
-    ${renderPropList(
-      (def.properties && def.properties.payload) || {},
-      undefined,
-      refTypePrefix,
-      renderCallingArgs,
-    )}
-  )
+  ${refTypePrefix}${renderActionCreatorName(def)}(${renderPropList(
+    (def.properties && def.properties.payload) || {}, // TODO validate
+    undefined,
+    refTypePrefix,
+    renderCallingArgs,
+  )})
   `.trim();
 }
 
 export function renderPropertiesObjectLiteral(
   prop: SchemaProperty,
-  separator: string = ',\n',
+  separator: string = ', ',
 ): string {
   return prop.type === 'object'
     ? `
-      {
-        ${(prop.properties && Object.keys(prop.properties).join(separator)) ||
-          ''}
-      }
+      { ${(prop.properties && Object.keys(prop.properties).join(separator)) ||
+        ''} }
       `.trim()
-    : 'null';
+    : 'null'; // TODO should this be disallowed by types?
 }
 
 const ACTION_SUFFIX = 'Action';
 const ACTION_SUFFIX_LENGTH = ACTION_SUFFIX.length;
 
+// TODO validate
 export function renderActionCreatorName(def: SchemaDefinition): string {
   return (
     def.title[0].toLowerCase() +

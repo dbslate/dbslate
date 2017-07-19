@@ -101,9 +101,9 @@ it(`renders the extends portion of an interface for a property`, () => {
   const prop = {
     allOf: [{$ref: '#/definitions/Foo'}, {$ref: '#/definitions/Bar'}],
   };
-  expect(h.renderInterfaceExtendType(prop)).toBe('extends t.Foo, t.Bar');
+  expect(h.renderInterfaceExtendType(prop)).toBe('extends t.Foo, t.Bar ');
   expect(h.renderInterfaceExtendType(prop, 'test.')).toBe(
-    'extends test.Foo, test.Bar',
+    'extends test.Foo, test.Bar ',
   );
 });
 
@@ -212,85 +212,82 @@ it(`infers a definition's type declaration kind`, () => {
   ).toBe(h.TypeDeclarationKind.Interface);
 });
 
-// it(``, () => {
-//   expect().toBe();
-// });
+it(`renders a definition's type declaration`, () => {
+  expect(
+    h.renderTypeDeclaration({title: 'Foo', type: 'number', value: 5}),
+  ).toBe('export type Foo = 5;');
+  expect(
+    h.renderTypeDeclaration({title: 'Foo', type: 'string', value: 'foo'}),
+  ).toBe('export type Foo = "foo";'); // double quotes because we're using `JSON.stringify` as a shortcut
+  expect(
+    h.renderTypeDeclaration({title: 'Foo', type: 'boolean', value: true}),
+  ).toBe('export type Foo = true;');
+  expect(
+    h.renderTypeDeclaration({
+      title: 'Foo',
+      oneOf: [{$ref: '#/definitions/Bar'}, {$ref: '#/definitions/Baz'}],
+    }),
+  ).toBe('export type Foo = Bar | Baz;');
+  expect(
+    h.renderTypeDeclaration({
+      title: 'Foo',
+      enum: ['Bar', 'Baz'],
+    }),
+  ).toBe('export enum Foo { Bar, Baz };');
+  expect(
+    h.renderTypeDeclaration({
+      title: 'Foo',
+      properties: {
+        bar: {value: 5},
+        baz: {value: 7},
+      },
+      required: ['bar'],
+    }),
+  ).toBe('export interface Foo { bar: 5; baz?: 7 }');
+});
 
-// export function renderTypeDeclaration(definition: SchemaDefinition): string {
-//   // TODO this should be a helper
-//   const typeDeclarationKind = inferTypeDeclarationKind(definition);
-//   switch (typeDeclarationKind) {
-//     case TypeDeclarationKind.TypeLiteral:
-//       return `
-//         export type ${definition.title} = ${renderPropertyType(definition, '')};
-//       `.trim();
-//     case TypeDeclarationKind.Enum:
-//       return `
-//         export enum ${definition.title}${renderPropertyType(
-//         definition,
-//         '',
-//         true,
-//       )};
-//       `.trim();
-//     case TypeDeclarationKind.Interface:
-//       return `
-//         export interface ${definition.title} ${renderInterfaceExtendType(
-//         definition,
-//         '',
-//         false,
-//       )} {
-//           ${renderPropList(definition, ';\n', '', renderPropertyPairNameToType)}
-//         }
-//       `.trim();
-//     default:
-//       h.is<never>(typeDeclarationKind);
-//       throw Error();
-//   }
-// }
+it(`renders a definiton as an action creator call`, () => {
+  expect(
+    h.renderActionCreatorCall({
+      title: 'FooAction',
+      properties: {payload: {}},
+    }),
+  ).toBe('t.foo()');
+  expect(
+    h.renderActionCreatorCall({
+      title: 'FooAction',
+      properties: {
+        payload: {
+          type: 'object',
+          properties: {bar: {value: 5}, baz: {value: 7}},
+        },
+      },
+    }),
+  ).toBe('t.foo(5, 7)');
+});
 
-// export function renderActionCreatorCall(
-//   def: SchemaDefinition,
-//   refTypePrefix: string = 't.',
-// ): string {
-//   return `
-//   ${refTypePrefix}${renderActionCreatorName(def)}(
-//     ${renderPropList(
-//       (def.properties && def.properties.payload) || {},
-//       undefined,
-//       refTypePrefix,
-//       renderCallingArgs,
-//     )}
-//   )
-//   `.trim();
-// }
+it(`renders the properties of an object literal`, () => {
+  expect(
+    h.renderPropertiesObjectLiteral({
+      type: 'string',
+      value: 'hi',
+    }),
+  ).toBe('null');
+  expect(
+    h.renderPropertiesObjectLiteral({
+      type: 'object',
+      properties: {
+        foo: {type: 'number', value: 5},
+        bar: {type: 'number', value: 7},
+      },
+    }),
+  ).toBe('{ foo, bar }');
+});
 
-// export function renderPropertiesObjectLiteral(
-//   prop: SchemaProperty,
-//   separator: string = ',\n',
-// ): string {
-//   return prop.type === 'object'
-//     ? `
-//       {
-//         ${(prop.properties && Object.keys(prop.properties).join(separator)) ||
-//           ''}
-//       }
-//       `.trim()
-//     : 'null';
-// }
+it(`renders a definition's action creator name`, () => {
+  expect(h.renderActionCreatorName({title: 'FooAction'})).toBe('foo');
+});
 
-// const ACTION_SUFFIX = 'Action';
-// const ACTION_SUFFIX_LENGTH = ACTION_SUFFIX.length;
-
-// export function renderActionCreatorName(def: SchemaDefinition): string {
-//   return (
-//     def.title[0].toLowerCase() +
-//     def.title.slice(1, def.title.length - ACTION_SUFFIX_LENGTH)
-//   );
-// }
-
-// export function renderActionTypeValue(
-//   def: SchemaDefinition,
-//   refTypePrefix: string = 't.',
-// ): string {
-//   return `${refTypePrefix}${def.title}`;
-// }
+it(`renders a definition's action type value`, () => {
+  expect(h.renderActionTypeValue({title: 'Foo'})).toBe('t.Foo');
+});
